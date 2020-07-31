@@ -95,6 +95,14 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script>
+      // Get the canvas for the throughput chart
+      const throughputChart = document
+        .getElementById("throughput-chart")
+        .getContext("2d");
+      // Get the canvas for the burn down chart
+      const burnDownChart = document
+        .getElementById("burn-down-chart")
+        .getContext("2d");
     </script>
   </body>
 </html>
