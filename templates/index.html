@@ -278,6 +278,35 @@
           },
         ],
       };
+
+      const stackedBar = new Chart(throughputChart, {
+        type: "bar",
+        data: barData,
+        options: {
+          scales: {
+            xAxes: [
+              {
+                stacked: true,
+              },
+            ],
+            yAxes: [
+              {
+                stacked: true,
+              },
+            ],
+          },
+        },
+      });
+
+      const boundaryLine = new Chart(burnDownChart, {
+        type: "line",
+        data: lineData,
+        options: {
+          title: {
+            display: true,
+          },
+        },
+      });
     </script>
   </body>
 </html>
