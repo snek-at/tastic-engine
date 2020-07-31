@@ -6,6 +6,28 @@
   </head>
   <body>
     {% extends "base.html" %} {% block content %} {% endblock %}
+    <p></p>
+    <div class="charts">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h3>Throughput Chart</h3>
+              <canvas id="throughput-chart"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h3>Burn Down Chart</h3>
+              <canvas id="burn-down-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p></p>
     <div class="feature">
       <h2>Latest Feature Collection</h2>
       <div class="list-group">
