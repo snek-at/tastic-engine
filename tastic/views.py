@@ -226,3 +226,6 @@ def stories(request):
             },
         ],
     }
+
+    # Render site
+    return render(request, "pages/stories.html", values)
