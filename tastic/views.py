@@ -147,5 +147,19 @@ def dods(request):
             },
         ],
     }
+
+    # Add Pagination for files list
+    page = request.GET.get("page", 1)
+
+    paginator = Paginator(values["files"], 7)
+    try:
+        files = paginator.page(page)
+    except PageNotAnInteger:
+        files = paginator.page(1)
+    except EmptyPage:
+        files = paginator.page(paginator.num_pages)
+
+    values["files"] = files
+
     # Render site
     return render(request, "pages/dods.html", values)
