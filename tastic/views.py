@@ -147,3 +147,5 @@ def dods(request):
             },
         ],
     }
+    # Render site
+    return render(request, "pages/dods.html", values)
