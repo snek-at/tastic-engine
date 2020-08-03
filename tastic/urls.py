@@ -11,5 +11,5 @@ urlpatterns = [
     path("features/", views.features, name="features_route"),
     path("dods/", views.dods, name="dods_route"),
     path("stories/", views.stories, name="user_stories_route"),
-    path("reports/", views.index, name="status_reports_route"),
+    path("reports/", views.reports, name="status_reports_route"),
 ]
