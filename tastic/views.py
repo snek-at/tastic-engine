@@ -242,3 +242,102 @@ def stories(request):
 
     # Render site
     return render(request, "pages/stories.html", values)
+
+
+def reports(request):
+    # Dummy Data
+    values = {
+        "sortedBy": "Newest",
+        "users": [
+            {
+                "name": "Pinterid",
+                "is_authenticated": True,
+                "files": [
+                    {
+                        "name": "File1",
+                        "createdAt": "29/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                    {
+                        "name": "File2",
+                        "createdAt": "30/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                ],
+            },
+            {
+                "name": "Kleber",
+                "is_authenticated": False,
+                "files": [
+                    {
+                        "name": "File1",
+                        "createdAt": "29/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                    {
+                        "name": "File2",
+                        "createdAt": "30/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                ],
+            },
+            {
+                "name": "Schett",
+                "is_authenticated": False,
+                "files": [
+                    {
+                        "name": "File1",
+                        "createdAt": "29/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                    {
+                        "name": "File2",
+                        "createdAt": "30/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                    {
+                        "name": "File2",
+                        "createdAt": "30/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                    {
+                        "name": "File2",
+                        "createdAt": "30/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                    {
+                        "name": "File2",
+                        "createdAt": "30/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                    {
+                        "name": "File2",
+                        "createdAt": "30/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                    {
+                        "name": "File2",
+                        "createdAt": "30/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                    {
+                        "name": "File2",
+                        "createdAt": "30/07/2020",
+                        "viewUrl": "https://snek.at",
+                        "downloadUrl": "https://snek.at",
+                    },
+                ],
+            },
+        ],
+    }
