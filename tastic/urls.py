@@ -9,7 +9,7 @@ urlpatterns = [
     path("throughputs/", views.index, name="throughput_charts_route"),
     path("burndowns/", views.index, name="burn_down_charts_route"),
     path("features/", views.features, name="features_route"),
-    path("dods/", views.index, name="dods_route"),
+    path("dods/", views.dods, name="dods_route"),
     path("stories/", views.index, name="user_stories_route"),
     path("reports/", views.index, name="status_reports_route"),
 ]
