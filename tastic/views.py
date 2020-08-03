@@ -67,3 +67,5 @@ def features(request):
             },
         ],
     }
+    # Render site
+    return render(request, "pages/features.html", values)
