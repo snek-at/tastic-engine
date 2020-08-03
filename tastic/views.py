@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def index(request):
@@ -67,5 +68,19 @@ def features(request):
             },
         ],
     }
+
+    # Add Pagination for files list
+    page = request.GET.get("page", 1)
+
+    paginator = Paginator(values["files"], 7)
+    try:
+        files = paginator.page(page)
+    except PageNotAnInteger:
+        files = paginator.page(1)
+    except EmptyPage:
+        files = paginator.page(paginator.num_pages)
+
+    values["files"] = files
+
     # Render site
     return render(request, "pages/features.html", values)
