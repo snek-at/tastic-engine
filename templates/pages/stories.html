@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TASTIC - Engine</title>
+  </head>
+  <body>
+    {% extends "base.html" %} {% block content %}
+    <div class="finder" style="padding-top: 1rem;">
+      <div class="row">
+        <div class="col-10">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Filename"
+              aria-label="Filename"
+              aria-describedby="basic-addon2"
+            />
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button">
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <button
+                class="btn btn-outline-secondary dropdown-toggle"
+                type="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Sort: <b>{{ sortedBy }}</b>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Newest</a>
+                <a class="dropdown-item" href="#">Oldest</a>
+                <a class="dropdown-item" href="#">Smallest</a>
+                <a class="dropdown-item" href="#">Biggest</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stories" style="padding-top: 1rem;">
+      <div class="list-group">
+        {% for file in files %}
+        <li class="list-group-item" style="margin-top: 0.2rem;">
+          <div class="d-flex w-100 justify-content-between">
+            <div>
+              <h5 class="mb-1">{{ file.name }}</h5>
+              <small>Created on {{ file.createdAt }}</small>
+            </div>
+            <div>
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                onclick="window.open('{{ file.viewUrl }}', '_self')"
+              >
+                View
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                onclick="window.open('{{ file.downloadUrl }}')"
+              >
+                Download
+              </button>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </div>
+      <div class="pages" style="padding-top: 1rem;">
+        {% if files.has_other_pages %}
+        <ul class="pagination justify-content-center">
+          {% if files.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ files.previous_page_number }}">Previous</a>
+          </li>
+          {% else %}
+          <li class="disabled page-item">
+            <a class="page-link">Previous</a>
+          </li>
+          {% endif %} 
+          {% for i in files.paginator.page_range %} 
+            {% if files.number == i %}
+            <li class="page-item active">
+                <a class="page-link">{{ i }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            </li>
+            {% endif %} 
+          {% endfor %} 
+          {% if files.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ files.next_page_number }}">Next</a>
+          </li>
+          {% else %}
+          <li class="disabled page-item">
+            <a class="page-link">Next</a>
+          </li>
+          {% endif %}
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+    {% endblock %}
+  </body>
+</html>
