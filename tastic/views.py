@@ -341,3 +341,6 @@ def reports(request):
             },
         ],
     }
+
+    # Render site
+    return render(request, "pages/reports.html", values)
