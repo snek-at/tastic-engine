@@ -475,4 +475,60 @@ def throughputs(request):
     # Render site
     return render(request, "pages/throughputs.html", values)
 
+
+def burndowns(request):
+    # Dummy data
+    values = {
+        "filteredBy": "All time",
+        "lineData": {
+            "labels": ["25.07", "26.07", "27.07", "28.07", "29.07", "30.07", "31.07"],
+            "datasets": [
+                {
+                    "label": "Actual time remaining",
+                    "data": [6, 6, 5, 2, 1, 0, 0],
+                    "backgroundColor": [
+                        "rgba(240, 52, 52, 0.5)",
+                        "rgba(240, 52, 52, 0.5)",
+                        "rgba(240, 52, 52, 0.5)",
+                        "rgba(240, 52, 52, 0.5)",
+                        "rgba(240, 52, 52, 0.5)",
+                        "rgba(240, 52, 52, 0.5)",
+                        "rgba(240, 52, 52, 0.5)",
+                    ],
+                    "borderColor": [
+                        "rgba(240, 52, 52, 1)",
+                        "rgba(240, 52, 52, 1)",
+                        "rgba(240, 52, 52, 1)",
+                        "rgba(240, 52, 52, 1)",
+                        "rgba(240, 52, 52, 1)",
+                        "rgba(240, 52, 52, 1)",
+                        "rgba(240, 52, 52, 1)",
+                    ],
+                    "borderWidth": 2,
+                },
+                {
+                    "label": "Ideal time remaining",
+                    "data": [6, 5, 4, 3, 2, 1, 0],
+                    "backgroundColor": [
+                        "rgba(0, 230, 64, 0.5)",
+                        "rgba(0, 230, 64, 0.5)",
+                        "rgba(0, 230, 64, 0.5)",
+                        "rgba(0, 230, 64, 0.5)",
+                        "rgba(0, 230, 64, 0.5)",
+                        "rgba(0, 230, 64, 0.5)",
+                        "rgba(0, 230, 64, 0.5)",
+                    ],
+                    "borderColor": [
+                        "rgba(0, 230, 64, 1)",
+                        "rgba(0, 230, 64, 1)",
+                        "rgba(0, 230, 64, 1)",
+                        "rgba(0, 230, 64, 1)",
+                        "rgba(0, 230, 64, 1)",
+                        "rgba(0, 230, 64, 1)",
+                        "rgba(0, 230, 64, 1)",
+                    ],
+                    "borderWidth": 2,
+                },
+            ],
+        },
     }
