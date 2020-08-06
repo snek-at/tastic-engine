@@ -471,4 +471,8 @@ def throughputs(request):
             ],
         },
     }
+
+    # Render site
+    return render(request, "pages/throughputs.html", values)
+
     }
