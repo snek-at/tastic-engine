@@ -6,7 +6,7 @@ urlpatterns = [
     # TODO Views have to be changed if the views get updated
     path("login/", views.index, name="login_route"),
     path("logout/", views.index, name="logout_route"),
-    path("throughputs/", views.index, name="throughput_charts_route"),
+    path("throughputs/", views.throughputs, name="throughput_charts_route"),
     path("burndowns/", views.index, name="burn_down_charts_route"),
     path("features/", views.features, name="features_route"),
     path("dods/", views.dods, name="dods_route"),
