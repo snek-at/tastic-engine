@@ -203,7 +203,7 @@ def index(request):
     }
 
     # Render site
-    return render(request, "index.html")
+    return render(request, "index.html", values)
 
 
 def features(request):
