@@ -32,14 +32,22 @@
         <li class="list-group-item">
           <div class="d-flex w-100 justify-content-between">
             <div>
-              <h5 class="mb-1">Filename</h5>
-              <small>Created on 31/07/2020</small>
+              <h5 class="mb-1">{{ feature.name }}</h5>
+              <small>{{ feature.createdAt }}</small>
             </div>
             <div>
-              <button type="button" class="btn btn-outline-primary">
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                onclick="window.open('{{ feature.viewUrl }}')"
+              >
                 View
               </button>
-              <button type="button" class="btn btn-outline-success">
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                onclick="window.open('{{ feature.downloadUrl }}')"
+              >
                 Download
               </button>
             </div>
@@ -53,14 +61,51 @@
         <li class="list-group-item">
           <div class="d-flex w-100 justify-content-between">
             <div>
-              <h5 class="mb-1">Filename</h5>
-              <small>Created on 31/07/2020</small>
+              <h5 class="mb-1">{{ dod.name }}</h5>
+              <small>{{ dod.createdAt }}</small>
             </div>
             <div>
-              <button type="button" class="btn btn-outline-primary">
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                onclick="window.open('{{ dod.viewUrl }}')"
+              >
                 View
               </button>
-              <button type="button" class="btn btn-outline-success">
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                onclick="window.open('{{ dod.downloadUrl }}')"
+              >
+                Download
+              </button>
+            </div>
+          </div>
+        </li>
+      </div>
+    </div>
+    <div class="story" style="padding-top: 1rem;">
+      <h2>Latest User Story</h2>
+      <div class="list-group">
+        <li class="list-group-item">
+          <div class="d-flex w-100 justify-content-between">
+            <div>
+              <h5 class="mb-1">{{ story.name }}</h5>
+              <small>{{ story.createdAt }}</small>
+            </div>
+            <div>
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                onclick="window.open('{{ story.viewUrl }}')"
+              >
+                View
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                onclick="window.open('{{ story.downloadUrl }}')"
+              >
                 Download
               </button>
             </div>
@@ -74,14 +119,22 @@
         <li class="list-group-item">
           <div class="d-flex w-100 justify-content-between">
             <div>
-              <h5 class="mb-1">Filename</h5>
-              <small>Created on 31/07/2020</small>
+              <h5 class="mb-1">{{ report.name }}</h5>
+              <small>{{ report.createdAt }}</small>
             </div>
             <div>
-              <button type="button" class="btn btn-outline-primary">
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                onclick="window.open('{{ report.viewUrl }}')"
+              >
                 View
               </button>
-              <button type="button" class="btn btn-outline-success">
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                onclick="window.open('{{ report.downloadUrl }}')"
+              >
                 Download
               </button>
             </div>
@@ -91,6 +144,13 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script>
+      // HTML decoder
+      var decodeHTML = function (html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+      };
+
       // Get the canvas for the throughput chart
       const throughputChart = document
         .getElementById("throughput-chart")
@@ -100,180 +160,11 @@
         .getElementById("burn-down-chart")
         .getContext("2d");
 
-      // Dummy Data for stacked Bar Chart
-      let barData = {
-        labels: ["25.07", "26.07", "27.07", "28.07", "29.07", "30.07", "31.07"],
-        datasets: [
-          {
-            label: "Requirements",
-            data: [1, 1, 1, 1, 1, 1, 1],
-            backgroundColor: [
-              "rgba(144, 249, 162, 0.5)",
-              "rgba(144, 249, 162, 0.5)",
-              "rgba(144, 249, 162, 0.5)",
-              "rgba(144, 249, 162, 0.5)",
-              "rgba(144, 249, 162, 0.5)",
-              "rgba(144, 249, 162, 0.5)",
-              "rgba(144, 249, 162, 0.5)",
-            ],
-            borderColor: [
-              "rgba(144, 249, 162, 1)",
-              "rgba(144, 249, 162, 1)",
-              "rgba(144, 249, 162, 1)",
-              "rgba(144, 249, 162, 1)",
-              "rgba(144, 249, 162, 1)",
-              "rgba(144, 249, 162, 1)",
-              "rgba(144, 249, 162, 1)",
-            ],
-            borderWidth: 2,
-          },
-          {
-            label: "Features",
-            data: [1, 1, 1, 1, 1, 1, 1],
-            backgroundColor: [
-              "rgba(186, 5, 107, 0.5)",
-              "rgba(186, 5, 107, 0.5)",
-              "rgba(186, 5, 107, 0.5)",
-              "rgba(186, 5, 107, 0.5)",
-              "rgba(186, 5, 107, 0.5)",
-              "rgba(186, 5, 107, 0.5)",
-              "rgba(186, 5, 107, 0.5)",
-            ],
-            borderColor: [
-              "rgba(186, 5, 107, 1)",
-              "rgba(186, 5, 107, 1)",
-              "rgba(186, 5, 107, 1)",
-              "rgba(186, 5, 107, 1)",
-              "rgba(186, 5, 107, 1)",
-              "rgba(186, 5, 107, 1)",
-              "rgba(186, 5, 107, 1)",
-            ],
-            borderWidth: 2,
-          },
-          {
-            label: "Opportunities",
-            data: [1, 1, 1, 1, 1, 1, 1],
-            backgroundColor: [
-              "rgba(89, 59, 165, 0.5)",
-              "rgba(89, 59, 165, 0.5)",
-              "rgba(89, 59, 165, 0.5)",
-              "rgba(89, 59, 165, 0.5)",
-              "rgba(89, 59, 165, 0.5)",
-              "rgba(89, 59, 165, 0.5)",
-              "rgba(89, 59, 165, 0.5)",
-            ],
-            borderColor: [
-              "rgba(89, 59, 165, 1)",
-              "rgba(89, 59, 165, 1)",
-              "rgba(89, 59, 165, 1)",
-              "rgba(89, 59, 165, 1)",
-              "rgba(89, 59, 165, 1)",
-              "rgba(89, 59, 165, 1)",
-              "rgba(89, 59, 165, 1)",
-            ],
-            borderWidth: 2,
-          },
-          {
-            label: "Enhancements",
-            data: [1, 1, 1, 1, 1, 1, 1],
-            backgroundColor: [
-              "rgba(162, 238, 239, 0.5)",
-              "rgba(162, 238, 239, 0.5)",
-              "rgba(162, 238, 239, 0.5)",
-              "rgba(162, 238, 239, 0.5)",
-              "rgba(162, 238, 239, 0.5)",
-              "rgba(162, 238, 239, 0.5)",
-              "rgba(162, 238, 239, 0.5)",
-            ],
-            borderColor: [
-              "rgba(162, 238, 239, 1)",
-              "rgba(162, 238, 239, 1)",
-              "rgba(162, 238, 239, 1)",
-              "rgba(162, 238, 239, 1)",
-              "rgba(162, 238, 239, 1)",
-              "rgba(162, 238, 239, 1)",
-              "rgba(162, 238, 239, 1)",
-            ],
-            borderWidth: 2,
-          },
-          {
-            label: "Bugs",
-            data: [1, 1, 1, 1, 1, 1, 1],
-            backgroundColor: [
-              "rgba(215, 58, 74, 0.5)",
-              "rgba(215, 58, 74, 0.5)",
-              "rgba(215, 58, 74, 0.5)",
-              "rgba(215, 58, 74, 0.5)",
-              "rgba(215, 58, 74, 0.5)",
-              "rgba(215, 58, 74, 0.5)",
-              "rgba(215, 58, 74, 0.5)",
-            ],
-            borderColor: [
-              "rgba(215, 58, 74, 1)",
-              "rgba(215, 58, 74, 1)",
-              "rgba(215, 58, 74, 1)",
-              "rgba(215, 58, 74, 1)",
-              "rgba(215, 58, 74, 1)",
-              "rgba(215, 58, 74, 1)",
-              "rgba(215, 58, 74, 1)",
-            ],
-            borderWidth: 2,
-          },
-        ],
-      };
-
-      // Dummy Data for boundary line Chart
-      let lineData = {
-        labels: ["25.07", "26.07", "27.07", "28.07", "29.07", "30.07", "31.07"],
-        datasets: [
-          {
-            label: "Actual time remaining",
-            data: [6, 6, 5, 2, 1, 0, 0],
-            backgroundColor: [
-              "rgba(240, 52, 52, 0.5)",
-              "rgba(240, 52, 52, 0.5)",
-              "rgba(240, 52, 52, 0.5)",
-              "rgba(240, 52, 52, 0.5)",
-              "rgba(240, 52, 52, 0.5)",
-              "rgba(240, 52, 52, 0.5)",
-              "rgba(240, 52, 52, 0.5)",
-            ],
-            borderColor: [
-              "rgba(240, 52, 52, 1)",
-              "rgba(240, 52, 52, 1)",
-              "rgba(240, 52, 52, 1)",
-              "rgba(240, 52, 52, 1)",
-              "rgba(240, 52, 52, 1)",
-              "rgba(240, 52, 52, 1)",
-              "rgba(240, 52, 52, 1)",
-            ],
-            borderWidth: 2,
-          },
-          {
-            label: "Ideal time remaining",
-            data: [6, 5, 4, 3, 2, 1, 0],
-            backgroundColor: [
-              "rgba(0, 230, 64, 0.5)",
-              "rgba(0, 230, 64, 0.5)",
-              "rgba(0, 230, 64, 0.5)",
-              "rgba(0, 230, 64, 0.5)",
-              "rgba(0, 230, 64, 0.5)",
-              "rgba(0, 230, 64, 0.5)",
-              "rgba(0, 230, 64, 0.5)",
-            ],
-            borderColor: [
-              "rgba(0, 230, 64, 1)",
-              "rgba(0, 230, 64, 1)",
-              "rgba(0, 230, 64, 1)",
-              "rgba(0, 230, 64, 1)",
-              "rgba(0, 230, 64, 1)",
-              "rgba(0, 230, 64, 1)",
-              "rgba(0, 230, 64, 1)",
-            ],
-            borderWidth: 2,
-          },
-        ],
-      };
+      // Get bar data
+      let barData = JSON.parse(decodeHTML("{{ barData }}").replace(/'/g, '"'));
+      let lineData = JSON.parse(
+        decodeHTML("{{ lineData }}").replace(/'/g, '"')
+      );
 
       const stackedBar = new Chart(throughputChart, {
         type: "bar",
