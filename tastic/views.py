@@ -532,3 +532,6 @@ def burndowns(request):
             ],
         },
     }
+
+    # Render site
+    return render(request, "pages/burndowns.html", values)
