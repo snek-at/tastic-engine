@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TASTIC - Engine</title>
+  </head>
+  <body>
+    {% extends "base.html" %} {% block content %}
+    <div class="filter">
+      <div class="input-group">
+        <button
+          class="btn btn-outline-secondary dropdown-toggle"
+          type="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Filter: <b>{{ filteredBy }}</b>
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#">All time</a>
+          <a class="dropdown-item" href="#">Last year</a>
+          <a class="dropdown-item" href="#">Last month</a>
+          <a class="dropdown-item" href="#">Last week</a>
+          <a class="dropdown-item" href="#">Last day</a>
+          <a class="dropdown-item" href="#">Sprint X</a>
+        </div>
+      </div>
+    </div>
+    <div class="charts" style="padding-top: 1rem;">
+      <canvas id="throughput-chart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script>
+      // HTML decoder
+      var decodeHTML = function (html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+      };
+
+      // Get the canvas for the throughput chart
+      const throughputChart = document
+        .getElementById("throughput-chart")
+        .getContext("2d");
+
+      // Get bar data
+      let barData = JSON.parse(decodeHTML("{{ barData }}").replace(/'/g, '"'));
+
+      // Create chart
+      const stackedBar = new Chart(throughputChart, {
+        type: "bar",
+        data: barData,
+        options: {
+          scales: {
+            xAxes: [
+              {
+                stacked: true,
+              },
+            ],
+            yAxes: [
+              {
+                stacked: true,
+              },
+            ],
+          },
+        },
+      });
+    </script>
+    {% endblock %}
+  </body>
+</html>
