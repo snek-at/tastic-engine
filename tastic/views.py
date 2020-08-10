@@ -41,9 +41,20 @@ def update_burnDown(calendar):
         burnDown.ideal = date["ideal"]
         burnDown.save()
 
-def index(request):
-    global lineData
-    global barData
+
+def get_burnDown():
+    global client
+
+    calendar = {}
+
+    for burnDown in BurnDown.objects.all():
+        calendar[burnDown.date] = {
+            "actual": burnDown.actual,
+            "ideal": burnDown.ideal,
+        }
+
+    return client.getBurndown(calendar)
+
 
 def update_throughput(calendar):
     for date in calendar:
