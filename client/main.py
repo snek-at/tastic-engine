@@ -1,3 +1,10 @@
+# IMPORTS
+import requests
+import json
+from datetime import *
+import os
+from dotenv import load_dotenv
+
 # Class
 class githubClient:
     def __init__(
