@@ -21,3 +21,20 @@ class githubClient:
         self.labels = ["Feature", "Opportunity", "Requirement", "bug", "enhancement"]
         self.org = org
         self.project_start = project_start
+
+    # EXECUTION
+    # Get all repository names from snek-at organization
+    def getRepositories(self):
+        repos = []
+
+        with requests.get(
+            f"{self.api_url}/users/{self.org}/repos?access_token={os.getenv('ACCESS_TOKEN')}"
+        ) as repo_req:
+            # Convert html response to json
+            repo_json = json.loads(repo_req.text)
+
+            for repo in repo_json:
+                repos.append(repo["name"])
+
+        # Return found repositories
+        return repos
