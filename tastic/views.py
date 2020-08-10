@@ -46,6 +46,22 @@ def index(request):
     global lineData
     global barData
 
+def update_throughput(calendar):
+    for date in calendar:
+        try:
+            throughput = Throughput.objects.get(date=date)
+        except Throughput.DoesNotExist:
+            throughput = Throughput()
+            throughput.date = date
+
+        date = calendar[date]
+        throughput.features = date["Feature"]
+        throughput.requirements = date["Requirement"]
+        throughput.opportunities = date["Opportunity"]
+        throughput.enhancements = date["enhancement"]
+        throughput.bugs = date["bug"]
+        throughput.save()
+
     # This function will be moved into a cronjob, when the program gets moved into a container
     if lineData == {} or barData == {}:
         getData()
