@@ -72,3 +72,47 @@ class githubClient:
 
         # Return found issues
         return issues
+
+    # Create calendar
+    def determineIssues(self, issues):
+        calendar = {}
+        today = datetime.today()
+        project_start = self.project_start
+
+        while today > project_start:
+            calendar[project_start] = []
+            project_start += timedelta(days=1)
+
+        # Loop through each date of the calendar
+        for date in calendar:
+            issues_closed_per_date = {
+                "Requirement": 0,
+                "Feature": 0,
+                "Opportunity": 0,
+                "bug": 0,
+                "enhancement": 0,
+            }
+
+            # Loop through each issue
+            for issue in issues:
+                # Check if issue was closed
+                closed_at = issue["closed_at"]
+                if closed_at:
+                    closed_at = datetime.strptime(closed_at, "%Y-%m-%dT%H:%M:%SZ")
+                    # Check if GitHub closed at equals calendar date
+                    if (
+                        closed_at.year == date.year
+                        and closed_at.month == date.month
+                        and closed_at.day == date.day
+                    ):
+                        # Loop through each label
+                        for label in self.labels:
+                            # Loop through each issue label
+                            for issue_label in issue["labels"]:
+                                if label == issue_label["name"]:
+                                    issues_closed_per_date[label] += 1
+
+            calendar[date] = issues_closed_per_date
+
+        # Return calendar
+        return calendar
