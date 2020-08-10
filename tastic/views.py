@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from client.main import githubClient
-
+from tastic.models import Throughput, BurnDown
 barData = {}
 lineData = {}
 
