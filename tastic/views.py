@@ -10,6 +10,11 @@ lineData = {}
 def getData():
     client = githubClient()
 
+    # Throughput
+    repos = client.getRepositories()
+    issues = client.getIssues(repos)
+    calendar = client.determineIssues(issues)
+    barData = client.getThroughput(calendar)
 
 def index(request):
     # Dummy data
