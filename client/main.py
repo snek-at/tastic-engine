@@ -219,3 +219,19 @@ class githubClient:
                 columns[project["name"]] = columns_json
 
         return columns
+
+    def getCards(self, columns):
+        cards = {}
+        # Header for api preview period
+        headers = {"Accept": "application/vnd.github.inertia-preview+json"}
+
+        for column in columns:
+            column = columns[column]
+            for line in column:
+                with requests.get(
+                    f"{line['cards_url']}?access_token={os.getenv('ACCESS_TOKEN')}&per_page=100",
+                    headers=headers,
+                ) as cards_req:
+                    cards[line["name"]] = json.loads(cards_req.text)
+
+        return cards
