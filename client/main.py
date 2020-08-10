@@ -15,6 +15,8 @@ class githubClient:
         project_start=datetime(2020, 7, 15),
     ):
         # VARIABLES
+        project_folder = os.path.expanduser("./")
+        load_dotenv(os.path.join(project_folder, ".env"))
         self.api_url = api_url
         self.labels = ["Feature", "Opportunity", "Requirement", "bug", "enhancement"]
         self.org = org
