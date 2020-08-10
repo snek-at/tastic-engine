@@ -204,3 +204,18 @@ class githubClient:
                     projects.append(project)
 
         return projects
+
+    def getColumns(self, projects):
+        columns = {}
+        # Header for api preview period
+        headers = {"Accept": "application/vnd.github.inertia-preview+json"}
+
+        for project in projects:
+            with requests.get(
+                f"{project['columns_url']}?access_token={os.getenv('ACCESS_TOKEN')}",
+                headers=headers,
+            ) as columns_req:
+                columns_json = json.loads(columns_req.text)
+                columns[project["name"]] = columns_json
+
+        return columns
