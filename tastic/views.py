@@ -29,6 +29,19 @@ def getData():
     lineData = client.getBurndown(calendar)
 
 
+def update_burnDown(calendar):
+    for date in calendar:
+        try:
+            burnDown = BurnDown.objects.get(date=date)
+        except BurnDown.DoesNotExist:
+            burnDown = BurnDown()
+            burnDown.date = date
+
+        date = calendar[date]
+        burnDown.actual = date["actual"]
+        burnDown.ideal = date["ideal"]
+        burnDown.save()
+
 def index(request):
     global lineData
     global barData
