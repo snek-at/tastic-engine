@@ -278,3 +278,41 @@ class githubClient:
             calendar[date] = time_per_date
 
         return calendar
+
+    # Convert calendar data to charts.js data
+    def getBurndown(self, calendar):
+        labels = []
+        ideal = {
+            "label": "Ideal time remaining",
+            "data": [],
+            "backgroundColor": [],
+            "borderColor": [],
+            "borderWidth": 2,
+        }
+        actual = {
+            "label": "Actual time remaining",
+            "data": [],
+            "backgroundColor": [],
+            "borderColor": [],
+            "borderWidth": 2,
+        }
+
+        for date in calendar:
+            labels.append(f"{date.day}.{date.month}")
+
+            date = calendar[date]
+            # Ideal
+            ideal["data"].append(round(date["ideal"]))
+            ideal["backgroundColor"].append("rgba(0, 230, 64, 0.5)")
+            ideal["borderColor"].append("rgba(0, 230, 64, 1)")
+            # Actual
+            actual["data"].append(round(date["actual"]))
+            actual["backgroundColor"].append("rgba(240, 52, 52, 0.5)")
+            actual["borderColor"].append("rgba(240, 52, 52, 1)")
+
+        datasets = [ideal, actual]
+
+        chart = {"labels": labels, "datasets": datasets}
+
+        # Return chart data
+        return chart
