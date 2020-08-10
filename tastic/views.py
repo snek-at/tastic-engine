@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
+barData = {}
+lineData = {}
 def index(request):
     # Dummy data
     values = {
