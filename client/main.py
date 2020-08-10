@@ -18,7 +18,7 @@ class githubClient:
         project_folder = os.path.expanduser("./")
         load_dotenv(os.path.join(project_folder, ".env"))
         self.api_url = api_url
-        self.labels = ["Feature", "Opportunity", "Requirement", "bug", "enhancement"]
+        self.labels = labels
         self.org = org
         self.project_start = project_start
 
@@ -187,6 +187,7 @@ class githubClient:
 
         # Return chart data
         return chart
+
     def getProjects(self):
         projects = []
         # Header for api preview period
@@ -237,7 +238,7 @@ class githubClient:
         return cards
 
     def determineCards(self, cards, sprintDays=20):
-        all = 0
+        allHours = 0
         ideal = 0
         calendar = {}
         today = datetime.today()
@@ -246,10 +247,10 @@ class githubClient:
         for line in cards:
             for card in cards[line]:
                 time = int(card["note"].split("***Duration***\r\n")[1][:1])
-                all += time
+                allHours += time
 
-        ideal = all
-        actual = all
+        ideal = allHours
+        actual = allHours
 
         while today > project_start:
             calendar[project_start] = []
@@ -260,7 +261,7 @@ class githubClient:
             time_per_date = {"actual": actual, "ideal": ideal}
 
             if date.weekday() < 5:
-                ideal -= all / sprintDays
+                ideal -= allHours / sprintDays
                 if ideal < 0:
                     ideal = 0
 
