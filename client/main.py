@@ -235,3 +235,46 @@ class githubClient:
                     cards[line["name"]] = json.loads(cards_req.text)
 
         return cards
+
+    def determineCards(self, cards, sprintDays=20):
+        all = 0
+        ideal = 0
+        calendar = {}
+        today = datetime.today()
+        project_start = self.project_start
+
+        for line in cards:
+            for card in cards[line]:
+                time = int(card["note"].split("***Duration***\r\n")[1][:1])
+                all += time
+
+        ideal = all
+        actual = all
+
+        while today > project_start:
+            calendar[project_start] = []
+            project_start += timedelta(days=1)
+
+        # Loop through each date of the calendar
+        for date in calendar:
+            time_per_date = {"actual": actual, "ideal": ideal}
+
+            if date.weekday() < 5:
+                ideal -= all / sprintDays
+                if ideal < 0:
+                    ideal = 0
+
+            for card in cards["DONE"]:
+                updated_at = datetime.strptime(card["updated_at"], "%Y-%m-%dT%H:%M:%SZ")
+
+                if (
+                    updated_at.year == date.year
+                    and updated_at.month == date.month
+                    and updated_at.day == date.day
+                ):
+                    actual -= int(card["note"].split("***Duration***\r\n")[1][:1])
+                    time_per_date["actual"] = actual
+
+            calendar[date] = time_per_date
+
+        return calendar
