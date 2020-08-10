@@ -16,6 +16,14 @@ def getData():
     calendar = client.determineIssues(issues)
     barData = client.getThroughput(calendar)
 
+    # Burndown
+    projects = client.getProjects()
+    columns = client.getColumns(projects)
+    cards = client.getCards(columns)
+    calendar = client.determineCards(cards)
+    lineData = client.getBurndown(calendar)
+
+
 def index(request):
     # Dummy data
     values = {
