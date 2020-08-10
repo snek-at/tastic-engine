@@ -187,3 +187,20 @@ class githubClient:
 
         # Return chart data
         return chart
+    def getProjects(self):
+        projects = []
+        # Header for api preview period
+        headers = {"Accept": "application/vnd.github.inertia-preview+json"}
+
+        with requests.get(
+            f"{self.api_url}/orgs/snek-at/projects?access_token={os.getenv('ACCESS_TOKEN')}",
+            headers=headers,
+        ) as projects_req:
+            # Convert html response to json
+            projects_json = json.loads(projects_req.text)
+
+            for project in projects_json:
+                if "Sprint" in project["name"]:
+                    projects.append(project)
+
+        return projects
