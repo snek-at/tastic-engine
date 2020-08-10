@@ -3,22 +3,20 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from client.main import githubClient
 from tastic.models import Throughput, BurnDown
-barData = {}
-lineData = {}
 
+client = githubClient(
+    labels=["Feature", "Opportunity", "Requirement", "bug", "enhancement"]
+)
 
+# This function should be executed daily using a cronjob
 def getData():
-    global lineData
-    global barData
-
-    client = githubClient(
-        labels=["Feature", "Opportunity", "Requirement", "bug", "enhancement"]
-    )
+    global client
 
     # Throughput
     repos = client.getRepositories()
     issues = client.getIssues(repos)
     calendar = client.determineIssues(issues)
+    update_throughput(calendar)
     barData = client.getThroughput(calendar)
 
     # Burndown
@@ -26,6 +24,7 @@ def getData():
     columns = client.getColumns(projects)
     cards = client.getCards(columns)
     calendar = client.determineCards(cards)
+    update_burnDown(calendar)
     lineData = client.getBurndown(calendar)
 
 
