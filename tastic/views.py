@@ -88,11 +88,14 @@ def get_throughput():
         }
 
     return client.getThroughput(calendar)
+
+
+def index(request):
     # determined = client.determineCards(cards, columns)
     # Dummy data
     values = {
-        "lineData": lineData,
-        "barData": barData,
+        "lineData": get_burnDown(),
+        "barData": get_throughput(),
         "story": {
             "name": "User Story 1",
             "createdAt": "29/07/2020",
@@ -463,18 +466,16 @@ def reports(request):
 
 
 def throughputs(request):
-    global barData
     # Dummy data
-    values = {"filteredBy": "All time", "barData": barData}
+    values = {"filteredBy": "All time", "barData": get_throughput()}
 
     # Render site
     return render(request, "pages/throughputs.html", values)
 
 
 def burndowns(request):
-    global lineData
     # Dummy data
-    values = {"filteredBy": "All time", "lineData": lineData}
+    values = {"filteredBy": "All time", "lineData": get_burnDown()}
 
     # Render site
     return render(request, "pages/burndowns.html", values)
