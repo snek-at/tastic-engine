@@ -116,3 +116,74 @@ class githubClient:
 
         # Return calendar
         return calendar
+
+    # Convert calendar data to charts.js data
+    def getThroughput(self, calendar):
+        labels = []
+        feature = {
+            "label": "Feature",
+            "data": [],
+            "backgroundColor": [],
+            "borderColor": [],
+            "borderWidth": 2,
+        }
+        requirement = {
+            "label": "Requirement",
+            "data": [],
+            "backgroundColor": [],
+            "borderColor": [],
+            "borderWidth": 2,
+        }
+        opportunity = {
+            "label": "Opportunity",
+            "data": [],
+            "backgroundColor": [],
+            "borderColor": [],
+            "borderWidth": 2,
+        }
+        bug = {
+            "label": "Bug",
+            "data": [],
+            "backgroundColor": [],
+            "borderColor": [],
+            "borderWidth": 2,
+        }
+        enhancement = {
+            "label": "Enhancement",
+            "data": [],
+            "backgroundColor": [],
+            "borderColor": [],
+            "borderWidth": 2,
+        }
+
+        for date in calendar:
+            labels.append(f"{date.day}.{date.month}")
+
+            date = calendar[date]
+            # Feature
+            feature["data"].append(date["Feature"])
+            feature["backgroundColor"].append("rgba(186, 5, 107, 0.5)")
+            feature["borderColor"].append("rgba(186, 5, 107, 1)")
+            # Requirement
+            requirement["data"].append(date["Requirement"])
+            requirement["backgroundColor"].append("rgba(144, 249, 162, 0.5)")
+            requirement["borderColor"].append("rgba(144, 249, 162, 1)")
+            # Opportunity
+            opportunity["data"].append(date["Opportunity"])
+            opportunity["backgroundColor"].append("rgba(89, 59, 165, 0.5)")
+            opportunity["borderColor"].append("rgba(89, 59, 165, 1)")
+            # Bug
+            bug["data"].append(date["bug"])
+            bug["backgroundColor"].append("rgba(215, 58, 74, 0.5)")
+            bug["borderColor"].append("rgba(215, 58, 74, 1)")
+            # Enhancement
+            enhancement["data"].append(date["enhancement"])
+            enhancement["backgroundColor"].append("rgba(162, 238, 239, 0.5)")
+            enhancement["borderColor"].append("rgba(162, 238, 239, 1)")
+
+        datasets = [feature, requirement, opportunity, bug, enhancement]
+
+        chart = {"labels": labels, "datasets": datasets}
+
+        # Return chart data
+        return chart
