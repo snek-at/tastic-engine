@@ -38,3 +38,37 @@ class githubClient:
 
         # Return found repositories
         return repos
+
+    # Get all issues
+    def getIssues(self, repos):
+        issues = []
+
+        # Loop through each found repository
+        for repo in repos:
+            # Get all issues from the repository
+            with requests.get(
+                f"{self.api_url}/repos/snek-at/{repo}/issues?state=all&access_token={os.getenv('ACCESS_TOKEN')}"
+            ) as issue_req:
+                # Convert html response to json
+                issue_json = json.loads(issue_req.text)
+
+                # Loop through each issue
+                for issue in issue_json:
+                    # Loop through each label
+                    for label in issue["labels"]:
+                        # Check if the label is in the defined labels
+                        if label["name"] in self.labels:
+                            # Get datetime when the issue was created
+                            created_at = datetime.strptime(
+                                issue["created_at"], "%Y-%m-%dT%H:%M:%SZ"
+                            )
+
+                            # Check if issue was created after project start
+                            if created_at > self.project_start:
+
+                                # Check if issue is an actual issue and not a pull request
+                                if "pull_request" not in issue:
+                                    issues.append(issue)
+
+        # Return found issues
+        return issues
