@@ -72,9 +72,22 @@ def update_throughput(calendar):
         throughput.bugs = date["bug"]
         throughput.save()
 
-    # This function will be moved into a cronjob, when the program gets moved into a container
-    if lineData == {} or barData == {}:
-        getData()
+
+def get_throughput():
+    global client
+
+    calendar = {}
+
+    for throughput in Throughput.objects.all():
+        calendar[throughput.date] = {
+            "Feature": throughput.features,
+            "Requirement": throughput.requirements,
+            "Opportunity": throughput.opportunities,
+            "enhancement": throughput.enhancements,
+            "bug": throughput.bugs,
+        }
+
+    return client.getThroughput(calendar)
     # determined = client.determineCards(cards, columns)
     # Dummy data
     values = {
