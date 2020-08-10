@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 class githubClient:
     def __init__(
         self,
+        labels,
         api_url="https://api.github.com",
-        labels=["Feature", "Opportunity", "Requirement", "bug", "enhancement"],
         org="snek-at",
         project_start=datetime(2020, 7, 15),
     ):

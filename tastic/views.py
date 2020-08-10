@@ -11,7 +11,9 @@ def getData():
     global lineData
     global barData
 
-    client = githubClient()
+    client = githubClient(
+        labels=["Feature", "Opportunity", "Requirement", "bug", "enhancement"]
+    )
 
     # Throughput
     repos = client.getRepositories()
