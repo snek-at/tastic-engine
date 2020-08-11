@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from tastic.models import Throughput, BurnDown
+
+admin.site.register(Throughput)
+admin.site.register(BurnDown)
