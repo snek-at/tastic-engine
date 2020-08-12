@@ -407,3 +407,20 @@ class githubClient:
         with open(os.path.join(f"files/{name}", f"{name}.md"), "w") as f:
             f.write(f"---\n{yaml_data}\n---")
             f.close()
+
+    # Put the singel pdfs into the SNEK template
+    def combinePDFs(self, name):
+        # Create filename
+        today = date.today()
+        today = f"{today.year}{today.month}{today.day}.pdf"
+
+        # Create PDF
+        os.system(
+            f"pandoc -s {os.path.join('files/' + name, name + '.md')} -o {os.path.join('files/' +  name , today)} --from markdown --template snek"
+        )
+
+        # Delete unneeded PDFs
+        for path in os.listdir(os.path.join(os.getcwd(), f"files/{name}")):
+            path = os.path.join(os.getcwd(), f"files/{name}/{path}")
+            if os.path.isdir(path):
+                shutil.rmtree(path)
