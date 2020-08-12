@@ -382,6 +382,26 @@ def dowload_dod(request, filename):
     except Features.DoesNotExist():
         return Http404("File not found")
 
+def search_stories(request):
+    values = {}
+    files = []
+
+    # Get stories from db
+    for story in Stories.objects.filter(
+        filename__contains=request.POST.get("filename")
+    ):
+        files.append(
+            {"name": story.filename, "createdAt": story.date,}
+        )
+    # Add Pagination for files list
+    page = request.GET.get("page", 1)
+
+    values["files"] = add_pagination(page, files)
+    values["sortedBy"] = request.POST.get("filter")
+
+    # Render site
+    return render(request, "pages/stories.html", values)
+
 def add_pagination(page, files):
     paginator = Paginator(files, 7)
     try:
