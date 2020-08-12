@@ -408,7 +408,10 @@ class githubClient:
             f.write(f"---\n{yaml_data}\n---")
             f.close()
 
-        self.combinePDFs(name)
+        # Return path and filename for db
+        path, filename = self.combinePDFs(name)
+
+        return path, filename
 
     def getUserStories(self, features, name="stories"):
         stories = []
@@ -451,6 +454,12 @@ class githubClient:
         # Remove unneeded files
         os.remove(os.path.join("files/" + name, name + ".md"))
 
+        # Return path and filename for db
+        path = os.path.join(f"files/{name}", today)
+        filename = today
+
+        return path, filename
+
     # Put the singel pdfs into the SNEK template
     def combinePDFs(self, name):
         # Create filename
@@ -469,4 +478,10 @@ class githubClient:
                 shutil.rmtree(path)
 
         os.remove(os.path.join("files/" + name, name + ".md"))
+
+        # Return path and filename for db
+        path = os.path.join(f"files/{name}", today)
+        filename = today
+
+        return path, filename
 
