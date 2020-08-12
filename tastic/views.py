@@ -386,3 +386,13 @@ def dowload_feature(request, filename):
     except Features.DoesNotExist():
         return Http404("File not found")
 
+
+def dowload_story(request, filename):
+    try:
+        story = Stories.objects.get(filename=filename)
+        path = story.path
+        res = FileResponse(open(path, "rb"))
+        return res
+    except Features.DoesNotExist():
+        return Http404("File not found")
+
