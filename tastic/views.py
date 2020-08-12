@@ -405,3 +405,14 @@ def dowload_dod(request, filename):
         return res
     except Features.DoesNotExist():
         return Http404("File not found")
+
+def add_pagination(page, files):
+    paginator = Paginator(files, 7)
+    try:
+        files = paginator.page(page)
+    except PageNotAnInteger:
+        files = paginator.page(1)
+    except EmptyPage:
+        files = paginator.page(paginator.num_pages)
+
+    return files
