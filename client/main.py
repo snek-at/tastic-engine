@@ -4,6 +4,11 @@ import json
 from datetime import *
 import os
 from dotenv import load_dotenv
+from bs4 import BeautifulSoup
+import pdfkit
+from PyPDF2 import PdfFileReader, PdfFileWriter
+import yaml
+import shutil
 
 # Class
 class githubClient:
