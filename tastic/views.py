@@ -425,6 +425,27 @@ def search_stories(request):
     # Render site
     return render(request, "pages/stories.html", values)
 
+
+def search_dods(request):
+    values = {}
+    files = []
+
+    # Get dods from db
+    for dod in Dods.objects.filter(filename__contains=request.POST.get("filename")):
+        files.append(
+            {"name": dod.filename, "createdAt": dod.date,}
+        )
+
+    # Add Pagination for files list
+    page = request.GET.get("page", 1)
+
+    values["files"] = add_pagination(page, files)
+    values["sortedBy"] = request.POST.get("filter")
+
+    # Render site
+    return render(request, "pages/dods.html", values)
+
+
 def add_pagination(page, files):
     paginator = Paginator(files, 7)
     try:
