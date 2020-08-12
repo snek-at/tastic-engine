@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from client.main import githubClient
-from tastic.models import Throughput, BurnDown
+from tastic.models import Throughput, BurnDown, Features, Dods, Stories
 
 client = githubClient(
     labels=["Feature", "Opportunity", "Requirement", "bug", "enhancement"]
