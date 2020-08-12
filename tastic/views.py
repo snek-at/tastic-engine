@@ -57,6 +57,16 @@ def update_dods(path, filename):
     dods.path = path
     dods.save()
 
+def update_stories(path, filename):
+    try:
+        stories = Stories.objects.get(filename=filename)
+    except Stories.DoesNotExist:
+        stories = Stories()
+        stories.filename = filename
+
+    stories.path = path
+    stories.save()
+
 def update_burnDown(calendar):
     for date in calendar:
         try:
