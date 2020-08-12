@@ -396,3 +396,12 @@ def dowload_story(request, filename):
     except Features.DoesNotExist():
         return Http404("File not found")
 
+
+def dowload_dod(request, filename):
+    try:
+        dod = Dods.objects.get(filename=filename)
+        path = dod.path
+        res = FileResponse(open(path, "rb"))
+        return res
+    except Features.DoesNotExist():
+        return Http404("File not found")
