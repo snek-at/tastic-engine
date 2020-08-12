@@ -47,6 +47,16 @@ def update_features(path, filename):
     features.path = path
     features.save()
 
+def update_dods(path, filename):
+    try:
+        dods = Dods.objects.get(filename=filename)
+    except Dods.DoesNotExist:
+        dods = Dods()
+        dods.filename = filename
+
+    dods.path = path
+    dods.save()
+
 def update_burnDown(calendar):
     for date in calendar:
         try:
