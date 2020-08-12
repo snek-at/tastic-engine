@@ -73,7 +73,10 @@ class githubClient:
 
                                 # Check if issue is an actual issue and not a pull request
                                 if "pull_request" not in issue:
-                                    issues.append(issue)
+
+                                    # Prevent duplicates
+                                    if issue not in issues:
+                                        issues.append(issue)
 
         # Return found issues
         return issues
