@@ -347,3 +347,63 @@ class githubClient:
                     opportunities.append(issue)
 
         return opportunities
+
+    # Convert issues to pdfs
+    def issuesToPDFs(self, issues, name):
+        files = []
+        data = []
+
+        # Loop through each issue
+        for issue in issues:
+            # Get the html code of the issue
+            with requests.get(issue["html_url"]) as html_req:
+                # Parse the html code with BeautifulSoup
+                soup = BeautifulSoup(html_req.text, "html.parser")
+                # Get the head of the html code
+                head = soup.findAll("head")[0]
+                # Get the class with name edit-comment-hide
+                content = soup.find(class_="edit-comment-hide")
+                # Combine the head and the issue
+                html = f"{str(head)}<body>{str(content)}</body><div style = 'display:block; clear:both; page-break-after:always;'></div>"
+                # Create path
+                path = f"files/{name}/{issue['title'].replace(' ', '')}"
+                os.makedirs(path, exist_ok=True)
+
+                # Create pdf file out of html
+                pdfkit.from_string(html, f"{path}/0.pdf")
+                output_folder_path = os.path.join(os.getcwd(), path)
+                pdf = PdfFileReader(f"{path}/0.pdf")
+
+                # Loop through each page of the default pdf
+                for page_num in range(pdf.numPages):
+                    pdfWriter = PdfFileWriter()
+                    pdfWriter.addPage(pdf.getPage(page_num))
+
+                    # Save each page as a single file
+                    with open(
+                        os.path.join(output_folder_path, f"{page_num+1}.pdf"), "wb"
+                    ) as f:
+                        files.append(
+                            os.path.join(
+                                output_folder_path, f"{page_num+1}.pdf"
+                            ).replace("\\", "/")
+                        )
+                        pdfWriter.write(f)
+                        f.close()
+
+                data.append({"title": issue["title"], "files": files})
+
+        # Create yaml file
+        yaml_data = yaml.dump(
+            {
+                "issues": data,
+                "filename": name,
+                "logo": (os.path.join(os.getcwd(), "media/logo.png")).replace(
+                    "\\", "/"
+                ),
+            }
+        )
+
+        with open(os.path.join(f"files/{name}", f"{name}.md"), "w") as f:
+            f.write(f"---\n{yaml_data}\n---")
+            f.close()
