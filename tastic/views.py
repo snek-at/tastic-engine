@@ -47,6 +47,18 @@ def update_features(path, filename):
     features.path = path
     features.save()
 
+
+def get_features():
+    files = []
+
+    for feature in Features.objects.all():
+        files.append(
+            {"name": feature.filename, "createdAt": feature.date,}
+        )
+
+    return files
+
+
 def update_dods(path, filename):
     try:
         dods = Dods.objects.get(filename=filename)
