@@ -197,15 +197,7 @@ def features(request):
     # Add Pagination for files list
     page = request.GET.get("page", 1)
 
-    paginator = Paginator(values["files"], 7)
-    try:
-        files = paginator.page(page)
-    except PageNotAnInteger:
-        files = paginator.page(1)
-    except EmptyPage:
-        files = paginator.page(paginator.num_pages)
-
-    values["files"] = files
+    values["files"] = add_pagination(page, values["files"])
 
     # Render site
     return render(request, "pages/features.html", values)
@@ -221,15 +213,7 @@ def dods(request):
     # Add Pagination for files list
     page = request.GET.get("page", 1)
 
-    paginator = Paginator(values["files"], 7)
-    try:
-        files = paginator.page(page)
-    except PageNotAnInteger:
-        files = paginator.page(1)
-    except EmptyPage:
-        files = paginator.page(paginator.num_pages)
-
-    values["files"] = files
+    values["files"] = add_pagination(page, values["files"])
 
     # Render site
     return render(request, "pages/dods.html", values)
@@ -245,15 +229,7 @@ def stories(request):
     # Add Pagination for files list
     page = request.GET.get("page", 1)
 
-    paginator = Paginator(values["files"], 7)
-    try:
-        files = paginator.page(page)
-    except PageNotAnInteger:
-        files = paginator.page(1)
-    except EmptyPage:
-        files = paginator.page(paginator.num_pages)
-
-    values["files"] = files
+    values["files"] = add_pagination(page, values["files"])
 
     # Render site
     return render(request, "pages/stories.html", values)
