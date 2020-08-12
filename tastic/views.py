@@ -245,6 +245,25 @@ def get_throughput():
     return client.getThroughput(calendar)
 
 
+def get_year_throughput():
+    global client
+
+    calendar = {}
+    enddate = date.today()
+    startdate = enddate - timedelta(days=365)
+
+    for throughput in Throughput.objects.filter(date__range=[startdate, enddate]):
+        calendar[throughput.date] = {
+            "Feature": throughput.features,
+            "Requirement": throughput.requirements,
+            "Opportunity": throughput.opportunities,
+            "enhancement": throughput.enhancements,
+            "bug": throughput.bugs,
+        }
+
+    return client.getThroughput(calendar)
+
+
 def get_month_throughput():
     global client
 
