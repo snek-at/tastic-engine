@@ -6,9 +6,18 @@ from client.main import githubClient
 from tastic.models import Throughput, BurnDown, Features, Dods, Stories
 
 from datetime import *
+
+# Global variables
 client = githubClient(
     labels=["Feature", "Opportunity", "Requirement", "bug", "enhancement"]
 )
+filters = [
+    {"id": 1, "name": "All time", "selected": False},
+    {"id": 2, "name": "Last Year", "selected": False},
+    {"id": 3, "name": "Last Month", "selected": False},
+    {"id": 4, "name": "Last Week", "selected": False},
+    {"id": 5, "name": "Last Day", "selected": False},
+]
 
 # This function should be executed daily using a cronjob
 def getData():
