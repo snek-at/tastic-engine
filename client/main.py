@@ -448,6 +448,9 @@ class githubClient:
             f"pandoc -s {os.path.join('files/' + name, name + '.md')} -o {os.path.join('files/' +  name , today)} --from markdown --template stories"
         )
 
+        # Remove unneeded files
+        os.remove(os.path.join("files/" + name, name + ".md"))
+
     # Put the singel pdfs into the SNEK template
     def combinePDFs(self, name):
         # Create filename
@@ -464,3 +467,6 @@ class githubClient:
             path = os.path.join(os.getcwd(), f"files/{name}/{path}")
             if os.path.isdir(path):
                 shutil.rmtree(path)
+
+        os.remove(os.path.join("files/" + name, name + ".md"))
+
