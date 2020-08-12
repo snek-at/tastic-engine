@@ -262,12 +262,31 @@ def get_month_throughput():
         }
 
     return client.getThroughput(calendar)
+def get_day_throughput():
+    global client
+
+    calendar = {}
+    enddate = date.today()
+    startdate = enddate - timedelta(days=1)
+
+    for throughput in Throughput.objects.filter(date__range=[startdate, enddate]):
+        calendar[throughput.date] = {
+            "Feature": throughput.features,
+            "Requirement": throughput.requirements,
+            "Opportunity": throughput.opportunities,
+            "enhancement": throughput.enhancements,
+            "bug": throughput.bugs,
+        }
+
+    return client.getThroughput(calendar)
+
+
 def index(request):
     # getData()
     # Dummy data
     values = {
-        "lineData": get_burnDown(),
-        "barData": get_throughput(),
+        "lineData": get_week_burnDown(),
+        "barData": get_week_throughput(),
         "story": get_stories()[0],
         "report": {"name": "Status Report Pinterid", "createdAt": "29/07/2020",},
         "feature": get_features()[0],
