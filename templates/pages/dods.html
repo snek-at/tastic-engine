@@ -6,47 +6,51 @@
   </head>
   <body>
     {% extends "base.html" %} {% block content %}
-    <div class="finder" style="padding-top: 1rem;">
-      <div class="row">
-        <div class="col-10">
-          <div class="input-group mb-3">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Filename"
-              aria-label="Filename"
-              aria-describedby="basic-addon2"
-            />
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button">
-                Search
-              </button>
+    <form method="POST" action="{% url 'search_dods_route' %}">
+      {% csrf_token %}
+      <div class="finder" style="padding-top: 1rem;">
+        <div class="row">
+          <div class="col-10">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Filename"
+                aria-label="Filename"
+                aria-describedby="basic-addon2"
+                name="filename"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">
+                  Search
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-2">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <button
-                class="btn btn-outline-secondary dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Sort: <b>{{ sortedBy }}</b>
-              </button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Newest</a>
-                <a class="dropdown-item" href="#">Oldest</a>
-                <a class="dropdown-item" href="#">Smallest</a>
-                <a class="dropdown-item" href="#">Biggest</a>
+          <div class="col-2">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <button
+                  class="btn btn-outline-secondary dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Sort: <b>{{ sortedBy }}</b>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#">Newest</a>
+                  <a class="dropdown-item" href="#">Oldest</a>
+                  <a class="dropdown-item" href="#">Smallest</a>
+                  <a class="dropdown-item" href="#">Biggest</a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </form>
     <div class="dods" style="padding-top: 1rem;">
       <div class="list-group">
         {% for file in files %}
