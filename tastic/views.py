@@ -197,15 +197,7 @@ def features(request):
     # Add Pagination for files list
     page = request.GET.get("page", 1)
 
-    paginator = Paginator(values["files"], 7)
-    try:
-        files = paginator.page(page)
-    except PageNotAnInteger:
-        files = paginator.page(1)
-    except EmptyPage:
-        files = paginator.page(paginator.num_pages)
-
-    values["files"] = files
+    values["files"] = add_pagination(page, values["files"])
 
     # Render site
     return render(request, "pages/features.html", values)
@@ -221,15 +213,7 @@ def dods(request):
     # Add Pagination for files list
     page = request.GET.get("page", 1)
 
-    paginator = Paginator(values["files"], 7)
-    try:
-        files = paginator.page(page)
-    except PageNotAnInteger:
-        files = paginator.page(1)
-    except EmptyPage:
-        files = paginator.page(paginator.num_pages)
-
-    values["files"] = files
+    values["files"] = add_pagination(page, values["files"])
 
     # Render site
     return render(request, "pages/dods.html", values)
@@ -245,15 +229,7 @@ def stories(request):
     # Add Pagination for files list
     page = request.GET.get("page", 1)
 
-    paginator = Paginator(values["files"], 7)
-    try:
-        files = paginator.page(page)
-    except PageNotAnInteger:
-        files = paginator.page(1)
-    except EmptyPage:
-        files = paginator.page(paginator.num_pages)
-
-    values["files"] = files
+    values["files"] = add_pagination(page, values["files"])
 
     # Render site
     return render(request, "pages/stories.html", values)
@@ -405,3 +381,78 @@ def dowload_dod(request, filename):
         return res
     except Features.DoesNotExist():
         return Http404("File not found")
+
+
+def search_features(request):
+    values = {}
+    files = []
+
+    # Get features from db
+    for feature in Features.objects.filter(
+        filename__contains=request.POST.get("filename")
+    ):
+        files.append(
+            {"name": feature.filename, "createdAt": feature.date,}
+        )
+
+    # Add Pagination for files list
+    page = request.GET.get("page", 1)
+
+    values["files"] = add_pagination(page, files)
+    values["sortedBy"] = request.POST.get("filter")
+
+    # Render site
+    return render(request, "pages/features.html", values)
+
+
+def search_stories(request):
+    values = {}
+    files = []
+
+    # Get stories from db
+    for story in Stories.objects.filter(
+        filename__contains=request.POST.get("filename")
+    ):
+        files.append(
+            {"name": story.filename, "createdAt": story.date,}
+        )
+    # Add Pagination for files list
+    page = request.GET.get("page", 1)
+
+    values["files"] = add_pagination(page, files)
+    values["sortedBy"] = request.POST.get("filter")
+
+    # Render site
+    return render(request, "pages/stories.html", values)
+
+
+def search_dods(request):
+    values = {}
+    files = []
+
+    # Get dods from db
+    for dod in Dods.objects.filter(filename__contains=request.POST.get("filename")):
+        files.append(
+            {"name": dod.filename, "createdAt": dod.date,}
+        )
+
+    # Add Pagination for files list
+    page = request.GET.get("page", 1)
+
+    values["files"] = add_pagination(page, files)
+    values["sortedBy"] = request.POST.get("filter")
+
+    # Render site
+    return render(request, "pages/dods.html", values)
+
+
+def add_pagination(page, files):
+    paginator = Paginator(files, 7)
+    try:
+        files = paginator.page(page)
+    except PageNotAnInteger:
+        files = paginator.page(1)
+    except EmptyPage:
+        files = paginator.page(paginator.num_pages)
+
+    return files

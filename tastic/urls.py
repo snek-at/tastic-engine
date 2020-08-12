@@ -14,9 +14,12 @@ urlpatterns = [
         views.dowload_feature,
         name="download_feature_route",
     ),
+    path("features/search/", views.search_features, name="search_features_route"),
     path("dods/", views.dods, name="dods_route"),
-    path("dods/download/<filename>", views.dowload_dod, name="download_dod_route",),
+    path("dods/download/<filename>", views.dowload_dod, name="download_dod_route"),
+    path("dods/search/", views.search_dods, name="search_dods_route"),
     path("stories/", views.stories, name="user_stories_route"),
+    path("stories/search/", views.search_stories, name="search_stories_route"),
     path(
         "stories/download/<filename>",
         views.dowload_story,
