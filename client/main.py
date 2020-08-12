@@ -410,6 +410,44 @@ class githubClient:
 
         self.combinePDFs(name)
 
+    def getUserStories(self, features, name="stories"):
+        stories = []
+
+        # Loop through each feature
+        for feature in features:
+            stories.append(
+                {
+                    "title": feature["title"],
+                    "text": feature["body"].split("\r\n")[1].replace("- ", ""),
+                }
+            )
+
+        # Create path
+        os.makedirs(os.path.join(f"files/{name}"), exist_ok=True)
+
+        # Create yaml file
+        yaml_data = yaml.dump(
+            {
+                "stories": stories,
+                "logo": (os.path.join(os.getcwd(), "media/logo.png")).replace(
+                    "\\", "/"
+                ),
+            }
+        )
+
+        with open(os.path.join(f"files/{name}", f"{name}.md"), "w") as f:
+            f.write(f"---\n{yaml_data}\n---")
+            f.close()
+
+        # Create filename
+        today = date.today()
+        today = f"{today.year}{today.month}{today.day}.pdf"
+
+        # Create PDF
+        os.system(
+            f"pandoc -s {os.path.join('files/' + name, name + '.md')} -o {os.path.join('files/' +  name , today)} --from markdown --template stories"
+        )
+
     # Put the singel pdfs into the SNEK template
     def combinePDFs(self, name):
         # Create filename
