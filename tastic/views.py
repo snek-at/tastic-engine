@@ -69,6 +69,18 @@ def update_dods(path, filename):
     dods.path = path
     dods.save()
 
+
+def get_dods():
+    files = []
+
+    for dod in Dods.objects.all():
+        files.append(
+            {"name": dod.filename, "createdAt": dod.date,}
+        )
+
+    return files
+
+
 def update_stories(path, filename):
     try:
         stories = Stories.objects.get(filename=filename)
