@@ -631,6 +631,41 @@ def filter_burndowns(request):
 
     # Render site
     return render(request, "pages/burndowns.html", values)
+
+
+def filter_throughputs(request):
+    global filters
+
+    updated_filters = []
+    id = int(request.POST.get("filter"))
+
+    for filter in filters:
+        if filter["id"] == id:
+            filter["selected"] = True
+        else:
+            filter["selected"] = False
+
+        updated_filters.append(filter)
+
+    filters = updated_filters
+
+    barData = get_throughput()
+
+    if id == 2:
+        barData = get_year_throughput()
+    elif id == 3:
+        barData = get_month_throughput()
+    elif id == 4:
+        barData = get_week_throughput()
+    elif id == 5:
+        barData = get_day_throughput()
+
+    values = {"filters": filters, "barData": barData}
+
+    # Render site
+    return render(request, "pages/throughputs.html", values)
+
+
 def add_pagination(page, files):
     paginator = Paginator(files, 7)
     try:
