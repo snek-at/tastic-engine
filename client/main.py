@@ -325,3 +325,16 @@ class githubClient:
 
         # Return chart data
         return chart
+
+
+
+    def getOpportunities(self, issues):
+        opportunities = []
+
+        # Filter issues for Feature tag
+        for issue in issues:
+            for label in issue["labels"]:
+                if label["name"] == "Opportunity":
+                    opportunities.append(issue)
+
+        return opportunities
