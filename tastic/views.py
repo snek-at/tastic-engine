@@ -37,6 +37,16 @@ def getData():
     client.getUserStories(features=features, name="stories")
 
 
+def update_features(path, filename):
+    try:
+        features = Features.objects.get(filename=filename)
+    except Features.DoesNotExist:
+        features = Features()
+        features.filename = filename
+
+    features.path = path
+    features.save()
+
 def update_burnDown(calendar):
     for date in calendar:
         try:
