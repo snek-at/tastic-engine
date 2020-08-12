@@ -36,20 +36,16 @@
               <small>{{ feature.createdAt }}</small>
             </div>
             <div>
-              <button
-                type="button"
-                class="btn btn-outline-primary"
-                onclick="window.open('{{ feature.viewUrl }}')"
-              >
-                View
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-success"
-                onclick="window.open('{{ feature.downloadUrl }}')"
-              >
-                Download
-              </button>
+              <a href="/features/view/{{ story.name }}">
+                <button type="button" class="btn btn-outline-primary">
+                  View
+                </button>
+              </a>
+              <a href="/features/download/{{ story.name }}" download>
+                <button type="button" class="btn btn-outline-success">
+                  Download
+                </button>
+              </a>
             </div>
           </div>
         </li>
@@ -65,20 +61,16 @@
               <small>{{ dod.createdAt }}</small>
             </div>
             <div>
-              <button
-                type="button"
-                class="btn btn-outline-primary"
-                onclick="window.open('{{ dod.viewUrl }}')"
-              >
-                View
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-success"
-                onclick="window.open('{{ dod.downloadUrl }}')"
-              >
-                Download
-              </button>
+              <a href="/dods/view/{{ story.name }}">
+                <button type="button" class="btn btn-outline-primary">
+                  View
+                </button>
+              </a>
+              <a href="/dods/download/{{ story.name }}" download>
+                <button type="button" class="btn btn-outline-success">
+                  Download
+                </button>
+              </a>
             </div>
           </div>
         </li>
@@ -94,20 +86,16 @@
               <small>{{ story.createdAt }}</small>
             </div>
             <div>
-              <button
-                type="button"
-                class="btn btn-outline-primary"
-                onclick="window.open('{{ story.viewUrl }}')"
-              >
-                View
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-success"
-                onclick="window.open('{{ story.downloadUrl }}')"
-              >
-                Download
-              </button>
+              <a href="/stories/view/{{ story.name }}">
+                <button type="button" class="btn btn-outline-primary">
+                  View
+                </button>
+              </a>
+              <a href="/stories/download/{{ story.name }}" download>
+                <button type="button" class="btn btn-outline-success">
+                  Download
+                </button>
+              </a>
             </div>
           </div>
         </li>
@@ -123,20 +111,16 @@
               <small>{{ report.createdAt }}</small>
             </div>
             <div>
-              <button
-                type="button"
-                class="btn btn-outline-primary"
-                onclick="window.open('{{ report.viewUrl }}')"
-              >
-                View
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-success"
-                onclick="window.open('{{ report.downloadUrl }}')"
-              >
-                Download
-              </button>
+              <a href="/status/view/{{ story.name }}">
+                <button type="button" class="btn btn-outline-success">
+                  View
+                </button>
+              </a>
+              <a href="/status/download/{{ story.name }}" download>
+                <button type="button" class="btn btn-outline-success">
+                  Download
+                </button>
+              </a>
             </div>
           </div>
         </li>

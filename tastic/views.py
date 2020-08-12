@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import FileResponse, Http404
 
 from client.main import githubClient
-from tastic.models import Throughput, BurnDown
+from tastic.models import Throughput, BurnDown, Features, Dods, Stories
 
 client = githubClient(
     labels=["Feature", "Opportunity", "Requirement", "bug", "enhancement"]
@@ -29,12 +30,83 @@ def getData():
 
     # Get features file
     features = client.getFeatures(issues)
-    client.issuesToPDFs(issues=features, name="features")
+    path, filename = client.issuesToPDFs(issues=features, name="features")
+    update_features(path, filename)
+
     # Get definition of done file
     opportunities = client.getOpportunities(issues)
-    client.issuesToPDFs(issues=opportunities, name="dods")
+    path, filename = client.issuesToPDFs(issues=opportunities, name="dods")
+    update_dods(path, filename)
+
     # Get user stories
-    client.getUserStories(features=features, name="stories")
+    path, filename = client.getUserStories(features=features, name="stories")
+    update_stories(path, filename)
+
+
+def update_features(path, filename):
+    try:
+        features = Features.objects.get(filename=filename)
+    except Features.DoesNotExist:
+        features = Features()
+        features.filename = filename
+
+    features.path = path
+    features.save()
+
+
+def get_features():
+    files = []
+
+    for feature in Features.objects.all():
+        files.append(
+            {"name": feature.filename, "createdAt": feature.date,}
+        )
+
+    return files
+
+
+def update_dods(path, filename):
+    try:
+        dods = Dods.objects.get(filename=filename)
+    except Dods.DoesNotExist:
+        dods = Dods()
+        dods.filename = filename
+
+    dods.path = path
+    dods.save()
+
+
+def get_dods():
+    files = []
+
+    for dod in Dods.objects.all():
+        files.append(
+            {"name": dod.filename, "createdAt": dod.date,}
+        )
+
+    return files
+
+
+def update_stories(path, filename):
+    try:
+        stories = Stories.objects.get(filename=filename)
+    except Stories.DoesNotExist:
+        stories = Stories()
+        stories.filename = filename
+
+    stories.path = path
+    stories.save()
+
+
+def get_stories():
+    files = []
+
+    for story in Stories.objects.all():
+        files.append(
+            {"name": story.filename, "createdAt": story.date,}
+        )
+
+    return files
 
 
 def update_burnDown(calendar):
@@ -100,35 +172,15 @@ def get_throughput():
 
 
 def index(request):
-    # determined = client.determineCards(cards, columns)
+    # getData()
     # Dummy data
     values = {
         "lineData": get_burnDown(),
         "barData": get_throughput(),
-        "story": {
-            "name": "User Story 1",
-            "createdAt": "29/07/2020",
-            "viewUrl": "https://snek.at",
-            "downloadUrl": "https://snek.at",
-        },
-        "report": {
-            "name": "Status Report Pinterid",
-            "createdAt": "29/07/2020",
-            "viewUrl": "https://snek.at",
-            "downloadUrl": "https://snek.at",
-        },
-        "feature": {
-            "name": "Feature Collection 1",
-            "createdAt": "29/07/2020",
-            "viewUrl": "https://snek.at",
-            "downloadUrl": "https://snek.at",
-        },
-        "dod": {
-            "name": "Defintion of Done Sprint 1",
-            "createdAt": "29/07/2020",
-            "viewUrl": "https://snek.at",
-            "downloadUrl": "https://snek.at",
-        },
+        "story": get_stories()[0],
+        "report": {"name": "Status Report Pinterid", "createdAt": "29/07/2020",},
+        "feature": get_features()[0],
+        "dod": get_dods()[0],
     }
 
     # Render site
@@ -139,62 +191,7 @@ def features(request):
     # Dummy Data
     values = {
         "sortedBy": "Newest",
-        "files": [
-            {
-                "name": "File1",
-                "createdAt": "29/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File2",
-                "createdAt": "30/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-        ],
+        "files": get_features(),
     }
 
     # Add Pagination for files list
@@ -218,62 +215,7 @@ def dods(request):
     # Dummy Data
     values = {
         "sortedBy": "Newest",
-        "files": [
-            {
-                "name": "File1",
-                "createdAt": "29/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File2",
-                "createdAt": "30/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-        ],
+        "files": get_dods(),
     }
 
     # Add Pagination for files list
@@ -297,62 +239,7 @@ def stories(request):
     # Dummy Data
     values = {
         "sortedBy": "Newest",
-        "files": [
-            {
-                "name": "File1",
-                "createdAt": "29/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File2",
-                "createdAt": "30/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-        ],
+        "files": get_stories(),
     }
 
     # Add Pagination for files list
@@ -488,3 +375,33 @@ def burndowns(request):
 
     # Render site
     return render(request, "pages/burndowns.html", values)
+
+
+def dowload_feature(request, filename):
+    try:
+        feature = Features.objects.get(filename=filename)
+        path = feature.path
+        res = FileResponse(open(path, "rb"))
+        return res
+    except Features.DoesNotExist():
+        return Http404("File not found")
+
+
+def dowload_story(request, filename):
+    try:
+        story = Stories.objects.get(filename=filename)
+        path = story.path
+        res = FileResponse(open(path, "rb"))
+        return res
+    except Features.DoesNotExist():
+        return Http404("File not found")
+
+
+def dowload_dod(request, filename):
+    try:
+        dod = Dods.objects.get(filename=filename)
+        path = dod.path
+        res = FileResponse(open(path, "rb"))
+        return res
+    except Features.DoesNotExist():
+        return Http404("File not found")
