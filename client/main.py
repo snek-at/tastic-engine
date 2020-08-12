@@ -408,6 +408,8 @@ class githubClient:
             f.write(f"---\n{yaml_data}\n---")
             f.close()
 
+        self.combinePDFs(name)
+
     # Put the singel pdfs into the SNEK template
     def combinePDFs(self, name):
         # Create filename
