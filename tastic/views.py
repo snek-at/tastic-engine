@@ -27,6 +27,15 @@ def getData():
     update_burnDown(calendar)
     lineData = client.getBurndown(calendar)
 
+    # Get features file
+    features = client.getFeatures(issues)
+    client.issuesToPDFs(issues=features, name="features")
+    # Get definition of done file
+    opportunities = client.getOpportunities(issues)
+    client.issuesToPDFs(issues=opportunities, name="dods")
+    # Get user stories
+    client.getUserStories(features=features, name="stories")
+
 
 def update_burnDown(calendar):
     for date in calendar:
