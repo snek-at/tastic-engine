@@ -600,6 +600,37 @@ def search_dods(request):
     return render(request, "pages/dods.html", values)
 
 
+def filter_burndowns(request):
+    global filters
+
+    updated_filters = []
+    id = int(request.POST.get("filter"))
+
+    for filter in filters:
+        if filter["id"] == id:
+            filter["selected"] = True
+        else:
+            filter["selected"] = False
+
+        updated_filters.append(filter)
+
+    filters = updated_filters
+
+    lineData = get_burnDown()
+
+    if id == 2:
+        lineData = get_year_burnDown()
+    elif id == 3:
+        lineData = get_month_burnDown()
+    elif id == 4:
+        lineData = get_week_burnDown()
+    elif id == 5:
+        lineData = get_day_burnDown()
+
+    values = {"filters": filters, "lineData": lineData}
+
+    # Render site
+    return render(request, "pages/burndowns.html", values)
 def add_pagination(page, files):
     paginator = Paginator(files, 7)
     try:
