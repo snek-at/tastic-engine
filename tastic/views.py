@@ -375,3 +375,14 @@ def burndowns(request):
 
     # Render site
     return render(request, "pages/burndowns.html", values)
+
+
+def dowload_feature(request, filename):
+    try:
+        feature = Features.objects.get(filename=filename)
+        path = feature.path
+        res = FileResponse(open(path, "rb"))
+        return res
+    except Features.DoesNotExist():
+        return Http404("File not found")
+
