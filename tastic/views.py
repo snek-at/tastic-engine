@@ -29,12 +29,17 @@ def getData():
 
     # Get features file
     features = client.getFeatures(issues)
-    client.issuesToPDFs(issues=features, name="features")
+    path, filename = client.issuesToPDFs(issues=features, name="features")
+    update_features(path, filename)
+
     # Get definition of done file
     opportunities = client.getOpportunities(issues)
-    client.issuesToPDFs(issues=opportunities, name="dods")
+    path, filename = client.issuesToPDFs(issues=opportunities, name="dods")
+    update_dods(path, filename)
+
     # Get user stories
-    client.getUserStories(features=features, name="stories")
+    path, filename = client.getUserStories(features=features, name="stories")
+    update_stories(path, filename)
 
 
 def update_features(path, filename):
