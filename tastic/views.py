@@ -171,35 +171,15 @@ def get_throughput():
 
 
 def index(request):
-    # determined = client.determineCards(cards, columns)
+    # getData()
     # Dummy data
     values = {
         "lineData": get_burnDown(),
         "barData": get_throughput(),
-        "story": {
-            "name": "User Story 1",
-            "createdAt": "29/07/2020",
-            "viewUrl": "https://snek.at",
-            "downloadUrl": "https://snek.at",
-        },
-        "report": {
-            "name": "Status Report Pinterid",
-            "createdAt": "29/07/2020",
-            "viewUrl": "https://snek.at",
-            "downloadUrl": "https://snek.at",
-        },
-        "feature": {
-            "name": "Feature Collection 1",
-            "createdAt": "29/07/2020",
-            "viewUrl": "https://snek.at",
-            "downloadUrl": "https://snek.at",
-        },
-        "dod": {
-            "name": "Defintion of Done Sprint 1",
-            "createdAt": "29/07/2020",
-            "viewUrl": "https://snek.at",
-            "downloadUrl": "https://snek.at",
-        },
+        "story": get_stories()[0],
+        "report": {"name": "Status Report Pinterid", "createdAt": "29/07/2020",},
+        "feature": get_features()[0],
+        "dod": get_dods()[0],
     }
 
     # Render site
@@ -210,62 +190,7 @@ def features(request):
     # Dummy Data
     values = {
         "sortedBy": "Newest",
-        "files": [
-            {
-                "name": "File1",
-                "createdAt": "29/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File2",
-                "createdAt": "30/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-        ],
+        "files": get_features(),
     }
 
     # Add Pagination for files list
@@ -289,62 +214,7 @@ def dods(request):
     # Dummy Data
     values = {
         "sortedBy": "Newest",
-        "files": [
-            {
-                "name": "File1",
-                "createdAt": "29/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File2",
-                "createdAt": "30/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-        ],
+        "files": get_dods(),
     }
 
     # Add Pagination for files list
@@ -368,62 +238,7 @@ def stories(request):
     # Dummy Data
     values = {
         "sortedBy": "Newest",
-        "files": [
-            {
-                "name": "File1",
-                "createdAt": "29/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File2",
-                "createdAt": "30/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-            {
-                "name": "File3",
-                "createdAt": "31/07/2020",
-                "viewUrl": "https://snek.at",
-                "downloadUrl": "https://snek.at",
-            },
-        ],
+        "files": get_stories(),
     }
 
     # Add Pagination for files list
