@@ -72,20 +72,16 @@
                   <small>Created on {{ file.createdAt }}</small>
                 </div>
                 <div>
-                  <button
-                    type="button"
-                    class="btn btn-outline-primary"
-                    onclick="window.open('{{ file.viewUrl }}', '_self')"
-                  >
-                    View
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-outline-success"
-                    onclick="window.open('{{ file.downloadUrl }}')"
-                  >
-                    Download
-                  </button>
+                  <a href="/stories/view/{{ file.name }}">
+                    <button type="button" class="btn btn-outline-primary">
+                      View
+                    </button>
+                  </a>
+                  <a href="/stories/download/{{ file.name }}" download>
+                    <button type="button" class="btn btn-outline-success">
+                      Download
+                    </button>
+                  </a>
                 </div>
               </div>
             </li>
