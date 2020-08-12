@@ -382,6 +382,29 @@ def dowload_dod(request, filename):
     except Features.DoesNotExist():
         return Http404("File not found")
 
+
+def search_features(request):
+    values = {}
+    files = []
+
+    # Get features from db
+    for feature in Features.objects.filter(
+        filename__contains=request.POST.get("filename")
+    ):
+        files.append(
+            {"name": feature.filename, "createdAt": feature.date,}
+        )
+
+    # Add Pagination for files list
+    page = request.GET.get("page", 1)
+
+    values["files"] = add_pagination(page, files)
+    values["sortedBy"] = request.POST.get("filter")
+
+    # Render site
+    return render(request, "pages/features.html", values)
+
+
 def search_stories(request):
     values = {}
     files = []
