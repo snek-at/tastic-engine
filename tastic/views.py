@@ -348,16 +348,20 @@ def reports(request):
 
 
 def throughputs(request):
+    global filters
+
     # Dummy data
-    values = {"filteredBy": "All time", "barData": get_throughput()}
+    values = {"filters": filters, "barData": get_throughput()}
 
     # Render site
     return render(request, "pages/throughputs.html", values)
 
 
 def burndowns(request):
+    global filters
+
     # Dummy data
-    values = {"filteredBy": "All time", "lineData": get_burnDown()}
+    values = {"filters": filters, "lineData": get_burnDown()}
 
     # Render site
     return render(request, "pages/burndowns.html", values)
