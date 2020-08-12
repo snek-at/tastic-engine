@@ -162,6 +162,22 @@ def get_month_burnDown():
 
     return client.getBurndown(calendar)
 
+def get_day_burnDown():
+    global client
+
+    calendar = {}
+    enddate = date.today()
+    startdate = enddate - timedelta(days=1)
+
+    for burnDown in BurnDown.objects.filter(date__range=[startdate, enddate]):
+        calendar[burnDown.date] = {
+            "actual": burnDown.actual,
+            "ideal": burnDown.ideal,
+        }
+
+    return client.getBurndown(calendar)
+
+
 def update_throughput(calendar):
     for date in calendar:
         try:
