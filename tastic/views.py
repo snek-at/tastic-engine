@@ -91,6 +91,18 @@ def update_stories(path, filename):
     stories.path = path
     stories.save()
 
+
+def get_stories():
+    files = []
+
+    for story in Stories.objects.all():
+        files.append(
+            {"name": story.filename, "createdAt": story.date,}
+        )
+
+    return files
+
+
 def update_burnDown(calendar):
     for date in calendar:
         try:
