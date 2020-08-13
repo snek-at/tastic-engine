@@ -604,15 +604,15 @@ def filter_burndowns(request):
     global filters
 
     updated_filters = []
-    id = int(request.POST.get("filter"))
+    selected_id = int(request.POST.get("filter"))
 
-    for filter in filters:
-        if filter["id"] == id:
-            filter["selected"] = True
+    for item in filters:
+        if item["id"] == selected_id:
+            item["selected"] = True
         else:
-            filter["selected"] = False
+            item["selected"] = False
 
-        updated_filters.append(filter)
+        updated_filters.append(item)
 
     filters = updated_filters
 
@@ -637,15 +637,15 @@ def filter_throughputs(request):
     global filters
 
     updated_filters = []
-    id = int(request.POST.get("filter"))
+    selected_id = int(request.POST.get("filter"))
 
-    for filter in filters:
-        if filter["id"] == id:
-            filter["selected"] = True
+    for item in filters:
+        if item["id"] == selected_id:
+            item["selected"] = True
         else:
-            filter["selected"] = False
+            item["selected"] = False
 
-        updated_filters.append(filter)
+        updated_filters.append(item)
 
     filters = updated_filters
 
