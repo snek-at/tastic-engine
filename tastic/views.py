@@ -618,13 +618,13 @@ def filter_burndowns(request):
 
     lineData = get_burnDown()
 
-    if id == 2:
+    if selected_id == 2:
         lineData = get_year_burnDown()
-    elif id == 3:
+    elif selected_id == 3:
         lineData = get_month_burnDown()
-    elif id == 4:
+    elif selected_id == 4:
         lineData = get_week_burnDown()
-    elif id == 5:
+    elif selected_id == 5:
         lineData = get_day_burnDown()
 
     values = {"filters": filters, "lineData": lineData}
@@ -651,13 +651,13 @@ def filter_throughputs(request):
 
     barData = get_throughput()
 
-    if id == 2:
+    if selected_id == 2:
         barData = get_year_throughput()
-    elif id == 3:
+    elif selected_id == 3:
         barData = get_month_throughput()
-    elif id == 4:
+    elif selected_id == 4:
         barData = get_week_throughput()
-    elif id == 5:
+    elif selected_id == 5:
         barData = get_day_throughput()
 
     values = {"filters": filters, "barData": barData}
