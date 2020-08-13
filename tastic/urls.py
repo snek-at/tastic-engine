@@ -7,7 +7,15 @@ urlpatterns = [
     path("login/", views.index, name="login_route"),
     path("logout/", views.index, name="logout_route"),
     path("throughputs/", views.throughputs, name="throughput_charts_route"),
+    path(
+        "throughputs/filter",
+        views.filter_throughputs,
+        name="filter_throughputs_charts_route",
+    ),
     path("burndowns/", views.burndowns, name="burn_down_charts_route"),
+    path(
+        "burndowns/filter", views.filter_burndowns, name="filter_burn_down_charts_route"
+    ),
     path("features/", views.features, name="features_route"),
     path(
         "features/download/<filename>",

@@ -5,9 +5,19 @@ from django.http import FileResponse, Http404
 from client.main import githubClient
 from tastic.models import Throughput, BurnDown, Features, Dods, Stories
 
+from datetime import *
+
+# Global variables
 client = githubClient(
     labels=["Feature", "Opportunity", "Requirement", "bug", "enhancement"]
 )
+filters = [
+    {"id": 1, "name": "All time", "selected": False},
+    {"id": 2, "name": "Last Year", "selected": False},
+    {"id": 3, "name": "Last Month", "selected": False},
+    {"id": 4, "name": "Last Week", "selected": False},
+    {"id": 5, "name": "Last Day", "selected": False},
+]
 
 # This function should be executed daily using a cronjob
 def getData():
@@ -137,6 +147,70 @@ def get_burnDown():
     return client.getBurndown(calendar)
 
 
+def get_year_burnDown():
+    global client
+
+    calendar = {}
+    enddate = date.today()
+    startdate = enddate - timedelta(days=365)
+
+    for burnDown in BurnDown.objects.filter(date__range=[startdate, enddate]):
+        calendar[burnDown.date] = {
+            "actual": burnDown.actual,
+            "ideal": burnDown.ideal,
+        }
+
+    return client.getBurndown(calendar)
+
+
+def get_month_burnDown():
+    global client
+
+    calendar = {}
+    enddate = date.today()
+    startdate = enddate - timedelta(days=31)
+
+    for burnDown in BurnDown.objects.filter(date__range=[startdate, enddate]):
+        calendar[burnDown.date] = {
+            "actual": burnDown.actual,
+            "ideal": burnDown.ideal,
+        }
+
+    return client.getBurndown(calendar)
+
+
+def get_week_burnDown():
+    global client
+
+    calendar = {}
+    enddate = date.today()
+    startdate = enddate - timedelta(days=7)
+
+    for burnDown in BurnDown.objects.filter(date__range=[startdate, enddate]):
+        calendar[burnDown.date] = {
+            "actual": burnDown.actual,
+            "ideal": burnDown.ideal,
+        }
+
+    return client.getBurndown(calendar)
+
+
+def get_day_burnDown():
+    global client
+
+    calendar = {}
+    enddate = date.today()
+    startdate = enddate - timedelta(days=1)
+
+    for burnDown in BurnDown.objects.filter(date__range=[startdate, enddate]):
+        calendar[burnDown.date] = {
+            "actual": burnDown.actual,
+            "ideal": burnDown.ideal,
+        }
+
+    return client.getBurndown(calendar)
+
+
 def update_throughput(calendar):
     for date in calendar:
         try:
@@ -171,12 +245,88 @@ def get_throughput():
     return client.getThroughput(calendar)
 
 
+def get_year_throughput():
+    global client
+
+    calendar = {}
+    enddate = date.today()
+    startdate = enddate - timedelta(days=365)
+
+    for throughput in Throughput.objects.filter(date__range=[startdate, enddate]):
+        calendar[throughput.date] = {
+            "Feature": throughput.features,
+            "Requirement": throughput.requirements,
+            "Opportunity": throughput.opportunities,
+            "enhancement": throughput.enhancements,
+            "bug": throughput.bugs,
+        }
+
+    return client.getThroughput(calendar)
+
+
+def get_month_throughput():
+    global client
+
+    calendar = {}
+    enddate = date.today()
+    startdate = enddate - timedelta(days=31)
+
+    for throughput in Throughput.objects.filter(date__range=[startdate, enddate]):
+        calendar[throughput.date] = {
+            "Feature": throughput.features,
+            "Requirement": throughput.requirements,
+            "Opportunity": throughput.opportunities,
+            "enhancement": throughput.enhancements,
+            "bug": throughput.bugs,
+        }
+
+    return client.getThroughput(calendar)
+
+
+def get_week_throughput():
+    global client
+
+    calendar = {}
+    enddate = date.today()
+    startdate = enddate - timedelta(days=7)
+
+    for throughput in Throughput.objects.filter(date__range=[startdate, enddate]):
+        calendar[throughput.date] = {
+            "Feature": throughput.features,
+            "Requirement": throughput.requirements,
+            "Opportunity": throughput.opportunities,
+            "enhancement": throughput.enhancements,
+            "bug": throughput.bugs,
+        }
+
+    return client.getThroughput(calendar)
+
+
+def get_day_throughput():
+    global client
+
+    calendar = {}
+    enddate = date.today()
+    startdate = enddate - timedelta(days=1)
+
+    for throughput in Throughput.objects.filter(date__range=[startdate, enddate]):
+        calendar[throughput.date] = {
+            "Feature": throughput.features,
+            "Requirement": throughput.requirements,
+            "Opportunity": throughput.opportunities,
+            "enhancement": throughput.enhancements,
+            "bug": throughput.bugs,
+        }
+
+    return client.getThroughput(calendar)
+
+
 def index(request):
     # getData()
     # Dummy data
     values = {
-        "lineData": get_burnDown(),
-        "barData": get_throughput(),
+        "lineData": get_week_burnDown(),
+        "barData": get_week_throughput(),
         "story": get_stories()[0],
         "report": {"name": "Status Report Pinterid", "createdAt": "29/07/2020",},
         "feature": get_features()[0],
@@ -338,16 +488,20 @@ def reports(request):
 
 
 def throughputs(request):
+    global filters
+
     # Dummy data
-    values = {"filteredBy": "All time", "barData": get_throughput()}
+    values = {"filters": filters, "barData": get_throughput()}
 
     # Render site
     return render(request, "pages/throughputs.html", values)
 
 
 def burndowns(request):
+    global filters
+
     # Dummy data
-    values = {"filteredBy": "All time", "lineData": get_burnDown()}
+    values = {"filters": filters, "lineData": get_burnDown()}
 
     # Render site
     return render(request, "pages/burndowns.html", values)
@@ -444,6 +598,72 @@ def search_dods(request):
 
     # Render site
     return render(request, "pages/dods.html", values)
+
+
+def filter_burndowns(request):
+    global filters
+
+    updated_filters = []
+    selected_id = int(request.POST.get("filter"))
+
+    for item in filters:
+        if item["id"] == selected_id:
+            item["selected"] = True
+        else:
+            item["selected"] = False
+
+        updated_filters.append(item)
+
+    filters = updated_filters
+
+    lineData = get_burnDown()
+
+    if id == 2:
+        lineData = get_year_burnDown()
+    elif id == 3:
+        lineData = get_month_burnDown()
+    elif id == 4:
+        lineData = get_week_burnDown()
+    elif id == 5:
+        lineData = get_day_burnDown()
+
+    values = {"filters": filters, "lineData": lineData}
+
+    # Render site
+    return render(request, "pages/burndowns.html", values)
+
+
+def filter_throughputs(request):
+    global filters
+
+    updated_filters = []
+    selected_id = int(request.POST.get("filter"))
+
+    for item in filters:
+        if item["id"] == selected_id:
+            item["selected"] = True
+        else:
+            item["selected"] = False
+
+        updated_filters.append(item)
+
+    filters = updated_filters
+
+    barData = get_throughput()
+
+    if id == 2:
+        barData = get_year_throughput()
+    elif id == 3:
+        barData = get_month_throughput()
+    elif id == 4:
+        barData = get_week_throughput()
+    elif id == 5:
+        barData = get_day_throughput()
+
+    values = {"filters": filters, "barData": barData}
+
+    # Render site
+    return render(request, "pages/throughputs.html", values)
 
 
 def add_pagination(page, files):

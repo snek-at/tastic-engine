@@ -6,47 +6,22 @@
   </head>
   <body>
     {% extends "base.html" %} {% block content %}
-    <div class="filter">
-      <div class="row">
-        <div class="col">
-          <button
-            class="btn btn-outline-secondary dropdown-toggle"
-            type="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Filter: <b>{{ filteredBy }}</b>
-          </button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">All time</a>
-            <a class="dropdown-item" href="#">Last year</a>
-            <a class="dropdown-item" href="#">Last month</a>
-            <a class="dropdown-item" href="#">Last week</a>
-            <a class="dropdown-item" href="#">Last day</a>
-            <a class="dropdown-item" href="#">Sprint X</a>
-          </div>
-        </div>
-        <div class="col">
-          <button
-            class="btn btn-outline-secondary dropdown-toggle"
-            type="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Member: <b>{{ "All" }}</b>
-          </button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">All</a>
-            <a class="dropdown-item" href="#">Aichnerc</a>
-            <a class="dropdown-item" href="#">kleberbaum</a>
-            <a class="dropdown-item" href="#">pinterid</a>
-            <a class="dropdown-item" href="#">schettn</a>
+    <form method="POST" action="{% url 'filter_burn_down_charts_route' %}">
+      {% csrf_token %}
+      <div class="filter">
+        <div class="row">
+          <div class="col">
+            <select class="browser-default custom-select mb-4" name="filter" onchange="this.form.submit()">
+              {% for filter in filters %}
+                  <option value="{{ filter.id }}" {% if filter.selected %}selected{% endif %}>
+                      {{ filter.name }}
+                  </option>
+              {% endfor %}
+            </select>
           </div>
         </div>
       </div>
-    </div>
+    </form>
     <div class="charts" style="padding-top: 1rem;">
       <canvas id="burn-down-chart"></canvas>
     </div>
