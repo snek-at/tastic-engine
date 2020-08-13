@@ -485,3 +485,10 @@ class githubClient:
 
         return path, filename
 
+    def putReport(self, report, owner="Pinterid"):
+        path = f"files/reports/{owner}"
+        os.makedirs(path, exist_ok=True)
+
+        with open(f"{path}/{report.name}", "wb") as file:
+            for chunk in report.chunks():
+                file.write(chunk)

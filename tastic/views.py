@@ -537,6 +537,17 @@ def dowload_dod(request, filename):
         return Http404("File not found")
 
 
+def upload_report(request):
+    global client
+
+    if request.method == "POST" and request.FILES["report"]:
+        report = request.FILES["report"]
+
+        client.putReport(report)
+        # Render site
+        return render(request, "pages/reports.html", {})
+
+
 def search_features(request):
     values = {}
     files = []

@@ -88,63 +88,31 @@
             {% endfor %}
           </div>
           {% if user.is_authenticated %}
-          <button
-            type="button"
-            class="btn btn-success btn-lg btn-block"
-            style="margin-top: 0.2rem;"
-            data-toggle="modal"
-            data-target="#uploadModal"
+          <form
+            method="POST"
+            action="{% url 'upload_report_route' %}"
+            enctype="multipart/form-data"
           >
-            Upload Status Report
-          </button>
+            {% csrf_token %}
+            <input
+              type="file"
+              name="report"
+              id="file"
+              onchange="javascript:this.form.submit();"
+              hidden
+            />
+            <label
+              for="file"
+              class="btn btn-success btn-lg btn-block"
+              style="margin-top: 0.2rem;"
+              >Upload Status Report</label
+            >
+          </form>
           {% endif %}
         </div>
         {% endfor %}
       </div>
     </div>
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="uploadModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form action="/file-upload" class="dropzone" id="upload">
-              <div class="fallback">
-                <input name="file" type="file" multiple />
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
-    <script>
-      Dropzone.options.upload = {
-        paramName: "file", // The name that will be used to transfer the file
-        maxFilesize: 10, // MB
-        acceptedFiles: "application/pdf",
-        accept: function (file, done) {
-          done("File was uploaded!");
-        },
-      };
-    </script>
     {% endblock %}
   </body>
 </html>
