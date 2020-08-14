@@ -34,5 +34,10 @@ urlpatterns = [
         name="download_stories_route",
     ),
     path("reports/", views.reports, name="status_reports_route"),
-    path("dods/upload/", views.upload_report, name="upload_report_route"),
+    path("reports/upload/", views.upload_report, name="upload_report_route"),
+    path(
+        "reports/download/<filename>",
+        views.download_report,
+        name="download_report_route",
+    ),
 ]
