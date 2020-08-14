@@ -132,6 +132,23 @@ def update_reports(path, filename, owner):
     reports.owner = owner
     reports.save()
 
+
+def get_reports():
+    reports = []
+
+    for user in User.objects.all():
+        if user.username != "admin":
+            files = []
+
+            for file in Reports.objects.filter(owner=user):
+                files.append({"name": file.filename, "createdAt": file.date})
+
+            files.reverse()
+            reports.append({"owner": user, "files": files})
+
+    return reports
+
+
 def update_burnDown(calendar):
     for date in calendar:
         try:
