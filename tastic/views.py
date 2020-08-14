@@ -567,6 +567,16 @@ def dowload_dod(request, filename):
         return Http404("File not found")
 
 
+def download_report(request, filename):
+    try:
+        report = Reports.objects.get(filename=filename)
+        path = report.path
+        res = FileResponse(open(path, "rb"))
+        return res
+    except Features.DoesNotExist():
+        return Http404("File not found")
+
+
 def upload_report(request):
     global client
 
