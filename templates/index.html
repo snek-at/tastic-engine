@@ -102,28 +102,46 @@
       </div>
     </div>
     <div class="status" style="padding-top: 1rem;">
-      <h2>Latest Status Report</h2>
-      <div class="list-group">
-        <li class="list-group-item">
-          <div class="d-flex w-100 justify-content-between">
-            <div>
-              <h5 class="mb-1">{{ report.name }}</h5>
-              <small>{{ report.createdAt }}</small>
-            </div>
-            <div>
-              <a href="/status/view/{{ story.name }}">
-                <button type="button" class="btn btn-outline-success">
-                  View
-                </button>
-              </a>
-              <a href="/status/download/{{ story.name }}" download>
-                <button type="button" class="btn btn-outline-success">
-                  Download
-                </button>
-              </a>
+      <h2>Latest Status Reports</h2>
+      <div class="reports" style="padding-top: 1rem;">
+        <div class="row">
+          {% for report in reports %}
+          <div class="col-6" style="padding-top: 1rem;">
+            <h4>{{ report.owner }}</h4>
+            <div
+              class="list-group"
+              style="
+                max-height: 325px;
+                overflow-y: scroll;
+                -webkit-overflow-scrolling: touch;
+              "
+            >
+              {% for file in report.files %}
+              <li class="list-group-item" style="margin-top: 0.2rem;">
+                <div class="d-flex w-100 justify-content-between">
+                  <div>
+                    <h5 class="mb-1">{{ file.name }}</h5>
+                    <small>Created on {{ file.createdAt }}</small>
+                  </div>
+                  <div>
+                    <a href="/reports/view/{{ file.name }}">
+                      <button type="button" class="btn btn-outline-primary">
+                        View
+                      </button>
+                    </a>
+                    <a href="/reports/download/{{ file.name }}" download>
+                      <button type="button" class="btn btn-outline-success">
+                        Download
+                      </button>
+                    </a>
+                  </div>
+                </div>
+              </li>
+              {% endfor %}
             </div>
           </div>
-        </li>
+          {% endfor %}
+        </div>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
