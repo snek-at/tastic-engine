@@ -576,6 +576,29 @@ def search_dods(request):
     return render(request, "pages/dods.html", values)
 
 
+def search_reports(request):
+    values = {}
+    reports = []
+
+    for user in User.objects.all():
+        if user.username != "admin":
+            files = []
+
+            for file in Reports.objects.filter(owner=user).filter(
+                filename__contains=request.POST.get("filename")
+            ):
+                files.append({"name": file.filename, "createdAt": file.date})
+
+            files.reverse()
+            if files != []:
+                reports.append({"owner": user, "files": files})
+
+    values["sortedBy"] = request.POST.get("filter")
+    values["reports"] = reports
+    # Render site
+    return render(request, "pages/reports.html", values)
+
+
 def filter_burndowns(request):
     global filters
 
