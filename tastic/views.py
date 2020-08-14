@@ -353,12 +353,19 @@ def get_day_throughput():
 
 def index(request):
     # getData()
-    # Dummy data
+    reports = []
+
+    for report in get_reports():
+        if report["files"] != []:
+            reports.append({"owner": report["owner"], "files": [report["files"][0]]})
+        else:
+            reports.append(report)
+
     values = {
         "lineData": get_week_burnDown(),
         "barData": get_week_throughput(),
         "story": get_stories()[0],
-        "report": {"name": "Status Report Pinterid", "createdAt": "29/07/2020",},
+        "reports": reports,
         "feature": get_features()[0],
         "dod": get_dods()[0],
     }
