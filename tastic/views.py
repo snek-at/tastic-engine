@@ -537,7 +537,7 @@ def burndowns(request):
     return render(request, "pages/burndowns.html", values)
 
 
-def dowload_feature(request, filename):
+def download_feature(request, filename):
     try:
         feature = Features.objects.get(filename=filename)
         path = feature.path
@@ -547,7 +547,7 @@ def dowload_feature(request, filename):
         return Http404("File not found")
 
 
-def dowload_story(request, filename):
+def download_story(request, filename):
     try:
         story = Stories.objects.get(filename=filename)
         path = story.path
@@ -557,7 +557,7 @@ def dowload_story(request, filename):
         return Http404("File not found")
 
 
-def dowload_dod(request, filename):
+def download_dod(request, filename):
     try:
         dod = Dods.objects.get(filename=filename)
         path = dod.path
