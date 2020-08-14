@@ -577,15 +577,21 @@ def download_report(request, filename):
         return Http404("File not found")
 
 
+@login_required
 def upload_report(request):
     global client
 
     if request.method == "POST" and request.FILES["report"]:
         report = request.FILES["report"]
+        owner = request.user
 
-        client.putReport(report)
+        path, filename = client.putReport(report, owner)
+        update_reports(path, filename, owner)
+
+        values = {"reports": get_reports()}
+        print(values)
         # Render site
-        return render(request, "pages/reports.html", {})
+        return render(request, "pages/reports.html", values)
 
 
 def search_features(request):
