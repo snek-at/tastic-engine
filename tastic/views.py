@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import FileResponse, Http404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 from client.main import githubClient
-from tastic.models import Throughput, BurnDown, Features, Dods, Stories
+from tastic.models import Throughput, BurnDown, Features, Dods, Stories, Reports
 
 from datetime import *
 
