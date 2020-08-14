@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Throughput(models.Model):
@@ -32,4 +33,14 @@ class Stories(models.Model):
     filename = models.CharField(max_length=20, primary_key=True)
     date = models.DateTimeField(auto_now=True)
     path = models.CharField(max_length=200, null=True)
+
+
+class Reports(models.Model):
+    filename = models.CharField(max_length=20, null=True)
+    date = models.DateTimeField(auto_now=True)
+    path = models.CharField(max_length=200, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("filename", "owner")
 

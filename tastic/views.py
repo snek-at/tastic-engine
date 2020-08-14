@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import FileResponse, Http404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 from client.main import githubClient
-from tastic.models import Throughput, BurnDown, Features, Dods, Stories
+from tastic.models import Throughput, BurnDown, Features, Dods, Stories, Reports
 
 from datetime import *
 
@@ -72,6 +74,7 @@ def get_features():
             {"name": feature.filename, "createdAt": feature.date,}
         )
 
+    files.reverse()
     return files
 
 
@@ -94,6 +97,7 @@ def get_dods():
             {"name": dod.filename, "createdAt": dod.date,}
         )
 
+    files.reverse()
     return files
 
 
@@ -116,7 +120,36 @@ def get_stories():
             {"name": story.filename, "createdAt": story.date,}
         )
 
+    files.reverse()
     return files
+
+
+def update_reports(path, filename, owner):
+    try:
+        reports = Reports.objects.get(filename=filename)
+    except Reports.DoesNotExist:
+        reports = Reports()
+        reports.filename = filename
+
+    reports.path = path
+    reports.owner = owner
+    reports.save()
+
+
+def get_reports():
+    reports = []
+
+    for user in User.objects.all():
+        if user.username != "admin":
+            files = []
+
+            for file in Reports.objects.filter(owner=user):
+                files.append({"name": file.filename, "createdAt": file.date})
+
+            files.reverse()
+            reports.append({"owner": user, "files": files})
+
+    return reports
 
 
 def update_burnDown(calendar):
@@ -323,12 +356,19 @@ def get_day_throughput():
 
 def index(request):
     # getData()
-    # Dummy data
+    reports = []
+
+    for report in get_reports():
+        if report["files"] != []:
+            reports.append({"owner": report["owner"], "files": [report["files"][0]]})
+        else:
+            reports.append(report)
+
     values = {
         "lineData": get_week_burnDown(),
         "barData": get_week_throughput(),
         "story": get_stories()[0],
-        "report": {"name": "Status Report Pinterid", "createdAt": "29/07/2020",},
+        "reports": reports,
         "feature": get_features()[0],
         "dod": get_dods()[0],
     }
@@ -389,98 +429,7 @@ def reports(request):
     # Dummy Data
     values = {
         "sortedBy": "Newest",
-        "users": [
-            {
-                "name": "Pinterid",
-                "is_authenticated": True,
-                "files": [
-                    {
-                        "name": "File1",
-                        "createdAt": "29/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                    {
-                        "name": "File2",
-                        "createdAt": "30/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                ],
-            },
-            {
-                "name": "Kleber",
-                "is_authenticated": False,
-                "files": [
-                    {
-                        "name": "File1",
-                        "createdAt": "29/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                    {
-                        "name": "File2",
-                        "createdAt": "30/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                ],
-            },
-            {
-                "name": "Schett",
-                "is_authenticated": False,
-                "files": [
-                    {
-                        "name": "File1",
-                        "createdAt": "29/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                    {
-                        "name": "File2",
-                        "createdAt": "30/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                    {
-                        "name": "File2",
-                        "createdAt": "30/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                    {
-                        "name": "File2",
-                        "createdAt": "30/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                    {
-                        "name": "File2",
-                        "createdAt": "30/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                    {
-                        "name": "File2",
-                        "createdAt": "30/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                    {
-                        "name": "File2",
-                        "createdAt": "30/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                    {
-                        "name": "File2",
-                        "createdAt": "30/07/2020",
-                        "viewUrl": "https://snek.at",
-                        "downloadUrl": "https://snek.at",
-                    },
-                ],
-            },
-        ],
+        "reports": get_reports(),
     }
 
     # Render site
@@ -507,7 +456,7 @@ def burndowns(request):
     return render(request, "pages/burndowns.html", values)
 
 
-def dowload_feature(request, filename):
+def download_feature(request, filename):
     try:
         feature = Features.objects.get(filename=filename)
         path = feature.path
@@ -517,7 +466,7 @@ def dowload_feature(request, filename):
         return Http404("File not found")
 
 
-def dowload_story(request, filename):
+def download_story(request, filename):
     try:
         story = Stories.objects.get(filename=filename)
         path = story.path
@@ -527,7 +476,7 @@ def dowload_story(request, filename):
         return Http404("File not found")
 
 
-def dowload_dod(request, filename):
+def download_dod(request, filename):
     try:
         dod = Dods.objects.get(filename=filename)
         path = dod.path
@@ -537,15 +486,31 @@ def dowload_dod(request, filename):
         return Http404("File not found")
 
 
+def download_report(request, filename):
+    try:
+        report = Reports.objects.get(filename=filename)
+        path = report.path
+        res = FileResponse(open(path, "rb"))
+        return res
+    except Features.DoesNotExist():
+        return Http404("File not found")
+
+
+@login_required
 def upload_report(request):
     global client
 
     if request.method == "POST" and request.FILES["report"]:
         report = request.FILES["report"]
+        owner = request.user
 
-        client.putReport(report)
+        path, filename = client.putReport(report, owner)
+        update_reports(path, filename, owner)
+
+        values = {"reports": get_reports()}
+        print(values)
         # Render site
-        return render(request, "pages/reports.html", {})
+        return render(request, "pages/reports.html", values)
 
 
 def search_features(request):
