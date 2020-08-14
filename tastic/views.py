@@ -74,6 +74,7 @@ def get_features():
             {"name": feature.filename, "createdAt": feature.date,}
         )
 
+    files.reverse()
     return files
 
 
@@ -96,6 +97,7 @@ def get_dods():
             {"name": dod.filename, "createdAt": dod.date,}
         )
 
+    files.reverse()
     return files
 
 
@@ -118,6 +120,7 @@ def get_stories():
             {"name": story.filename, "createdAt": story.date,}
         )
 
+    files.reverse()
     return files
 
 
