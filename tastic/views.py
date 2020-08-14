@@ -121,6 +121,17 @@ def get_stories():
     return files
 
 
+def update_reports(path, filename, owner):
+    try:
+        reports = Reports.objects.get(filename=filename)
+    except Reports.DoesNotExist:
+        reports = Reports()
+        reports.filename = filename
+
+    reports.path = path
+    reports.owner = owner
+    reports.save()
+
 def update_burnDown(calendar):
     for date in calendar:
         try:
