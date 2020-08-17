@@ -245,7 +245,7 @@ class githubClient:
 
         return cards
 
-    def determineCards(self, cards, sprintDays=20):
+    def determineCards(self, cards, sprintDays=22):
         allHours = 0
         ideal = 0
         calendar = {}
