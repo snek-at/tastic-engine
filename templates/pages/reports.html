@@ -10,47 +10,51 @@
   </head>
   <body>
     {% extends "base.html" %} {% block content %}
-    <div class="finder" style="padding-top: 1rem;">
-      <div class="row">
-        <div class="col-10">
-          <div class="input-group mb-3">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Filename or Username"
-              aria-label="Filename or Username"
-              aria-describedby="basic-addon2"
-            />
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button">
-                Search
-              </button>
+    <form method="POST" action="{% url 'search_reports_route' %}">
+      {% csrf_token %}
+      <div class="finder" style="padding-top: 1rem;">
+        <div class="row">
+          <div class="col-10">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Filename or Username"
+                aria-label="Filename or Username"
+                aria-describedby="basic-addon2"
+                name="filename"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">
+                  Search
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-2">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <button
-                class="btn btn-outline-secondary dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Sort: <b>{{ sortedBy }}</b>
-              </button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Newest</a>
-                <a class="dropdown-item" href="#">Oldest</a>
-                <a class="dropdown-item" href="#">Smallest</a>
-                <a class="dropdown-item" href="#">Biggest</a>
+          <div class="col-2">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <button
+                  class="btn btn-outline-secondary dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Sort: <b>{{ sortedBy }}</b>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#">Newest</a>
+                  <a class="dropdown-item" href="#">Oldest</a>
+                  <a class="dropdown-item" href="#">Smallest</a>
+                  <a class="dropdown-item" href="#">Biggest</a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </form>
     {% if user.is_authenticated %}
     <form
       method="POST"

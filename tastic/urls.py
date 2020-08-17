@@ -35,6 +35,7 @@ urlpatterns = [
     ),
     path("reports/", views.reports, name="status_reports_route"),
     path("reports/upload/", views.upload_report, name="upload_report_route"),
+    path("reports/search/", views.search_reports, name="search_reports_route"),
     path(
         "reports/download/<filename>",
         views.download_report,
